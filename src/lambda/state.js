@@ -10,26 +10,18 @@ const updated = {
   master: dayjs(),
   drafts: dayjs()
 }
+
 const cache = {
   master: [ ],
   drafts: [ ]
 }
+
 const state = {
 
 }
 
 export function handler (event, context, callback) {
-  // const events = {
-  //   '/state': fetchEntries
-  // }
-
-  // if (typeof events[event.path] === 'function') {
-    // events[event.path](event, context, callback)
-  // } else {
-    // callback(null, {
-      // statusCode: 404
-    // })
-  // }
+  const { url } = event.queryStringParameters
   return fetchEntries(event, context, callback)
 }
 
