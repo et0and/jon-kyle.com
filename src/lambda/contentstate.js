@@ -1,3 +1,4 @@
+import * as matter from 'gray-matter'
 import fetch from 'node-fetch'
 import dotenv from 'dotenv'
 import dayjs from 'dayjs'
@@ -7,6 +8,7 @@ import path from 'path'
 dotenv.config()
 
 // auth
+const CLIENT_RAW = 'https://raw.githubusercontent.com/' + process.env.CLIENT_REPO + '/'
 const CLIENT_API = 'https://api.github.com/repos/' + process.env.CLIENT_REPO + '/contents/'
 const CLIENT_SECRET = process.env.CLIENT_SECRET
 const CLIENT_ID = process.env.CLIENT_ID
@@ -111,7 +113,6 @@ async function fetchFile (url = '/readme.md', ref = 'master') {
 
   return {
     title: 'lol this is a test yo',
-    _src: url,
     url: _url
   }
   // fetch otherwise
@@ -144,6 +145,13 @@ function formatRequestUrl (url, ref) {
 }
 
 /**
+ * Format File URL
+ */
+function formatFileUrl (url, ref) {
+  return CLIENT_RAW + ref + url
+}
+
+/**
  * Parse Page Data
  */
 function parsePageData (data, url) {
@@ -161,6 +169,8 @@ function parsePageData (data, url) {
         if (cur.name !== 'readme.md') {
           res.pages.push(path.join(url, path.basename(cur.name, path.extname(cur.name))))
           res._deps.push(path.join(url, cur.name))
+        } else {
+          res._src = cur.name
         }
       // file
       } else {
@@ -171,7 +181,6 @@ function parsePageData (data, url) {
       _deps: [ ],
       pages: [ ],
       files: [ ],
-      _src: url,
       url: url
     })
 }
@@ -181,8 +190,26 @@ function parsePageData (data, url) {
  */
 function fetchPageContent (page, ref) {
   return new Promise((resolve, reject) => {
-    resolve(page)
+    if (page._src) {
+      return fetch(formatFileUrl(page.url + '/' + page._src, ref))
+        .then(data => data.text())
+        .then(data => resolve(Object.assign(parseContent(data), page)))
+        .catch(err => resolve(page))
+    } else {
+      return resolve(page)
+    }
   })
+}
+
+/**
+ * Parse Content
+ */
+function parseContent (data) {
+  const content = matter(data)
+  return {
+    ...content.data,
+    content: content.content.trim()
+  }
 }
 
 /**
