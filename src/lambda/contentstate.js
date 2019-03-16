@@ -19,16 +19,21 @@ const branches = ['master', 'drafts']
 const timeout = 5
 
 // cache
+let caching = false
 const updated = { }
 const state = { }
-let caching = false
 
 /**
  * Lambda Handler
  */
 export function handler (event, context, callback) {
-  const ref = event.queryStringParameters.ref || 'master'
-  const url = event.queryStringParameters.url || '/'
+  const params = Object.assign({
+    full: false,
+    ref: 'master',
+    amount: 1,
+    page: 1,
+    url: '/' 
+  }, event.queryStringParameters)
 
   // populate state
   if (!caching) {
@@ -37,7 +42,7 @@ export function handler (event, context, callback) {
   }
 
   // grab the directory
-  getPage(url, ref)
+  getPage(params.url, params.ref, true, params.full)
     .then(data => onSuccess(data))
     .catch(err => onError(err))
 
@@ -45,6 +50,7 @@ export function handler (event, context, callback) {
     callback(null, {
       statusCode: 200,
       contentType: 'json',
+      headers: { 'content-type': 'application/json; charset=utf-8' },
       body: JSON.stringify(data)
     })
   }
@@ -53,6 +59,7 @@ export function handler (event, context, callback) {
     callback(null, {
       statusCode: 200,
       contentType: 'json',
+      headers: { 'content-type': 'application/json; charset=utf-8' },
       body: JSON.stringify({ message: 'Not found' })
     })
   }
@@ -78,7 +85,7 @@ function initializeState (url, ref) {
 /**
  * Get Page
  */
-async function getPage (url = '/', ref = 'master', recursive = true) {
+async function getPage (url = '/', ref = 'master', recursive = true, isFull = false) {
   try {
     // file
     if (path.extname(url) === '.md') {
@@ -87,7 +94,7 @@ async function getPage (url = '/', ref = 'master', recursive = true) {
     // directory
     } else {
       const page = await fetchDirectory(url, ref)
-      if (recursive) {
+      if (recursive && isFull) {
         const pages = await Promise
           .all(page._deps.map(url => getPage(url, ref, false)))
           .then(data => data.reduce((res, cur) =>  Object.assign(res, cur), { }))
@@ -110,16 +117,11 @@ async function fetchFile (url = '/readme.md', ref = 'master') {
 
   const name = path.basename(url)
   const _url = path.join(path.dirname(url), path.basename(name, path.extname(name)))
+  const page = { url: _url }
 
-  return {
-    title: 'lol this is a test yo',
-    url: _url
-  }
-  // fetch otherwise
-  // return fetch('https://raw.githubusercontent.com/')
-  //   .then(resp => {
-
-  //   })
+  return fetch(formatFileUrl(url, ref))
+    .then(data => data.text())
+    .then(data => Object.assign(parseContent(data), page))
 }
 
 /**
@@ -204,12 +206,23 @@ function fetchPageContent (page, ref) {
 /**
  * Parse Content
  */
-function parseContent (data) {
-  const content = matter(data)
-  return {
-    ...content.data,
-    content: content.content.trim()
+function parseContent (_data) {
+  let { data, content } = matter(_data)
+
+  // clean up
+  content = content.trim()
+
+  // title
+  if (content && content.substring(0, 2) === '# ') {
+    data.title = content.substring(2, content.indexOf('\n'))
   }
+
+  // content
+  if (data.title) {
+    content = content.substring(content.indexOf('\n'), content.length).trim()
+  }
+
+  return { ...data, content }
 }
 
 /**
@@ -234,4 +247,14 @@ function isPageCached (url, ref) {
   const hasState = state[ref] && state[ref][url]
   const isFresh = () => dayjs(updated[ref][url]).add(timeout, 'minutes').isBefore(now)
   return (hasUpdated && hasState && isFresh())
+}
+
+
+/**
+ *  Get Page Meta
+ */
+function getMetaFromUrl (url) {
+    const name = url.replace(/.md/g, '')
+    const date = name.substring(0, 10)
+    return { name, date }
 }
