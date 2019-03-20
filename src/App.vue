@@ -42,7 +42,7 @@ export default {
         content: this.page ? this.page.title || this.page.dateFormatted : false,
         template: titleChunk => (titleChunk ? `${titleChunk} / Jon-Kyle` : 'Jon-Kyle'),
         vmid: 'og:title',
-      },
+      }
     ]
 
     if (this.page && this.page.content && this.$route && this.$route.name === 'entry') {
@@ -71,18 +71,18 @@ export default {
         name: 'twitter:card',
         content: 'summary_large_image',
         vmid: 'twitter:card',
-      },
+      })
       metaTags.push({
         name: 'og:card',
         content: 'summary_large_image',
         vmid: 'og:card',
-      },
-      {
+      })
+      metaTags.push({
         name: 'twitter:image',
         content: image,
         vmid: 'twitter:image',
-      },
-      {
+      })
+      metaTags.push({
         property: 'og:image',
         content: image,
         vmid: 'og:image',
