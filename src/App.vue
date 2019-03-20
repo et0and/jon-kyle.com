@@ -22,10 +22,7 @@ export default {
     if (!this.$store.state.content['/']) {
       this.$store.dispatch('fetchEntry', '/readme.md')
     }
-    // quick fix for seo
-    setTimeout(() => {
-      window.prerenderReady = true
-    }, 1000)
+    setTimeout(() => { window.prerenderReady = true }, 1000)
   },
   metaInfo() {
     const image = this.page && this.page.image
