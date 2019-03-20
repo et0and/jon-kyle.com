@@ -11,6 +11,6 @@ export default {
   name: 'home',
   components: {
     FeedEntries,
-  }
+  },
 }
 </script>

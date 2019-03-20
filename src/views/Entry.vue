@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ContentEntry :entry="page" :key="page.name" />
+    <ContentEntry :entry="page" v-if="page" :key="page.name" />
     <div class="footer">
       <div v-if="next">
         Next<br>
@@ -21,37 +21,36 @@ import { mixin } from '../store'
 
 export default {
   name: 'home',
-  mixins: [ mixin ],
+  mixins: [mixin],
   components: {
-   ContentEntry
+    ContentEntry,
   },
-  metaInfo () {
+  metaInfo() {
     return { title: this.title }
   },
   computed: {
-    entries () {
+    entries() {
       return this.$store.state.content['/entries']
     },
-    prev () {
+    prev() {
       if (!this.entries || !this.page) return
       const index = this.entries.pages.indexOf(this.page.url)
       return this.$store.state.content[this.entries.pages[index - 1]]
     },
-    next () {
+    next() {
       if (!this.entries || !this.page) return
       const index = this.entries.pages.indexOf(this.page.url)
       return this.$store.state.content[this.entries.pages[index + 1]]
     },
-    title () {
+    title() {
       if (!this.page) return
       const { dateFormatted, content } = this.page
       if (content && content.substring(0, 2) === '# ') {
         return content.substring(2, content.indexOf('\n'))
-      } else {
-        return dateFormatted
       }
-    }
-  }
+      return dateFormatted
+    },
+  },
 }
 </script>
 

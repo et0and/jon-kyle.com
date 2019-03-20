@@ -9,33 +9,34 @@
 import LoadingIndicator from '@/components/LoadingIndicator'
 import markdownIt from 'markdown-it'
 import { mixin } from '../store'
+
 const md = new markdownIt()
 
 export default {
   name: 'About',
-  mixins: [ mixin ],
+  mixins: [mixin],
   components: { LoadingIndicator },
-  metaInfo () {
+  metaInfo() {
     return { title: 'About' }
   },
-  mounted () {
+  mounted() {
     if (!this.page) {
       this.$store.dispatch('fetchEntry', '/about.md')
     }
   },
   computed: {
-    content () {
+    content() {
       if (typeof this.page !== 'object') return
-      const { location, branch} = this.$store.state.api
+      const { location, branch } = this.$store.state.api
       return this.page.content
-        .replace('jon-kyle.jpg', location + branch + '/jon-kyle.jpg')
+        .replace('jon-kyle.jpg', `${location + branch}/jon-kyle.jpg`)
         .split('---')
-        .map(section => {
+        .map((section) => {
           section = section.trim().replace(/^\# .*\n\n/g, '')
           return md.render(section)
         })
-    }
-  }
+    },
+  },
 }
 </script>
 
@@ -53,7 +54,7 @@ section {
 
 @media (max-width: 750px) {
   section { grid-column: span 6 }
-  section:first-child { grid-column: 1 / -1 }  
+  section:first-child { grid-column: 1 / -1 }
 }
 
 @media (max-width: 600px) {

@@ -1,6 +1,7 @@
 import dotenv from 'dotenv'
 import fetch from 'node-fetch'
 import dayjs from 'dayjs'
+
 dotenv.config()
 
 const CLIENT_SECRET = process.env.CLIENT_SECRET
@@ -8,24 +9,24 @@ const CLIENT_ID = process.env.CLIENT_ID
 
 const updated = {
   master: dayjs(),
-  drafts: dayjs()
+  drafts: dayjs(),
 }
 
 const cache = {
-  master: [ ],
-  drafts: [ ]
+  master: [],
+  drafts: [],
 }
 
 const state = {
 
 }
 
-export function handler (event, context, callback) {
+export function handler(event, context, callback) {
   const { url } = event.queryStringParameters
   return fetchEntries(event, context, callback)
 }
 
-function fetchEntries (event, context, callback) {
+function fetchEntries(event, context, callback) {
   const now = dayjs()
   const ref = event.queryStringParameters.ref || 'master'
 
@@ -34,32 +35,32 @@ function fetchEntries (event, context, callback) {
     callback(null, {
       statusCode: 200,
       contentType: 'json',
-      body: JSON.stringify(cache[ref])
+      body: JSON.stringify(cache[ref]),
     })
   } else {
     console.log('Fetching new entries')
     fetch(`https://api.github.com/repos/jondashkyle/archive/contents/entries?ref=${ref}`, {
       headers: {
-        'client_id': process.env.CLIENT_ID,
-        'client_secret': process.env.CLIENT_SECRET
-      }
+        client_id: process.env.CLIENT_ID,
+        client_secret: process.env.CLIENT_SECRET,
+      },
     }).then(response => response.json())
-      .then(data => {
+      .then((data) => {
         console.log('Succesfully fetched new entries')
         updated[ref] = now
         cache[ref] = data
         callback(null, {
           statusCode: 200,
           contentType: 'json',
-          body: JSON.stringify(cache[ref])
+          body: JSON.stringify(cache[ref]),
         })
       })
-      .catch(err => {
+      .catch((err) => {
         console.log('Error fetching new entries')
         callback(null, {
           statusCode: 401,
           contentType: 'json',
-          body: JSON.stringify({ msg: 'No luck' })
+          body: JSON.stringify({ msg: 'No luck' }),
         })
       })
   }

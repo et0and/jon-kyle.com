@@ -35,6 +35,9 @@ export function handler (event, context, callback) {
     url: '/' 
   }, event.queryStringParameters)
 
+  // format data
+  params.full = params.full === 'true'
+
   // populate state
   if (!caching) {
     branches.forEach(branch => initializeState('/', branch))
@@ -42,7 +45,7 @@ export function handler (event, context, callback) {
   }
 
   // grab the directory
-  getPage(params.url, params.ref, true, params.full)
+  getPage(params.url, params.ref, true, true)
     .then(data => onSuccess(data))
     .catch(err => onError(err))
 
@@ -69,17 +72,8 @@ export function handler (event, context, callback) {
  * Initialize State
  */
 function initializeState (url, ref) {
-  fetchDirectory(url, ref)
-    .then(onSuccess)
-    .catch(onError)
-
-  function onSuccess (resp) {
-    resp.pages.forEach(url => fetchDirectory(url, ref))
-  }
-
-  function onError (err) {
-    return console.warn(err)
-  }
+  fetchDirectory(url, ref, true, true)
+    .catch(err => console.warn(err.message))
 }
 
 /**
@@ -90,22 +84,43 @@ async function getPage (url = '/', ref = 'master', recursive = true, isFull = fa
     // file
     if (path.extname(url) === '.md') {
       const page = await fetchFile(url, ref)
-      return { [page.url]: page }
+      return { [page.url]: formatPage(page, isFull) }
     // directory
     } else {
-      const page = await fetchDirectory(url, ref)
-      if (recursive && isFull) {
-        const pages = await Promise
-          .all(page._deps.map(url => getPage(url, ref, false)))
-          .then(data => data.reduce((res, cur) =>  Object.assign(res, cur), { }))
-        return Object.assign({ [page.url]: page }, pages)
-      } else {
-        return { [page.url]: page }
+      // page
+      try {
+        const page = await fetchDirectory(url, ref)
+        if (recursive) {
+          const pages = await Promise
+            .all(page._deps.map(url => getPage(url, ref, false, false)))
+            .then(data => data.reduce((res, cur) =>  Object.assign(res, cur), { }))
+          return Object.assign({ [page.url]: formatPage(page, isFull) }, pages)
+        } else {
+          return { [page.url]: formatPage(page, isFull) }
+        }
+      // file
+      } catch (err) {
+        const page = await fetchFile(url + '.md', ref)
+        return { [page.url]: formatPage(page, isFull) }
       }
     }
   } catch (err){ 
     return { message: err.message }
   }
+}
+
+function formatPage (page = { }, isFull = false) {
+  const output = Object.assign({ }, page)
+  if (output.content.indexOf('404' === 0)) {
+    output.status = 404
+  }
+  if (!isFull) {
+    output.pages = [ ]
+    output.files = [ ]
+    delete output.content
+  }
+  delete output._deps
+  return output
 }
 
 /**
@@ -114,7 +129,6 @@ async function getPage (url = '/', ref = 'master', recursive = true, isFull = fa
 async function fetchFile (url = '/readme.md', ref = 'master') {
   // return cached if valid
   if (isPageCached(url, ref)) return state[ref][url]
-
   const name = path.basename(url)
   const _url = path.join(path.dirname(url), path.basename(name, path.extname(name)))
   const page = { url: _url }
@@ -122,6 +136,7 @@ async function fetchFile (url = '/readme.md', ref = 'master') {
   return fetch(formatFileUrl(url, ref))
     .then(data => data.text())
     .then(data => Object.assign(parseContent(data), page))
+    .then(page => cachePage(page, ref))
 }
 
 /**
@@ -130,8 +145,6 @@ async function fetchFile (url = '/readme.md', ref = 'master') {
 function fetchDirectory (url = '/', ref = 'master') {
   // return cached if valid
   if (isPageCached(url, ref)) return state[ref][url]
-
-  // fetch otherwise
   return fetch(formatRequestUrl(url, ref))
     .then(data => data.json())
     .then(data => parsePageData(data, url))
@@ -234,7 +247,7 @@ function cachePage (page, ref) {
   if (!state[ref][page.url]) state[ref][page.url] = { }
   if (!updated[ref]) updated[ref] = { }
   Object.assign(state[ref][page.url], page)
-  updated[ref][page.url] = now
+  updated[ref][page.url] = now.format()
   return page
 }
 
@@ -245,10 +258,9 @@ function isPageCached (url, ref) {
   const now = dayjs()
   const hasUpdated = updated[ref] && updated[ref][url]
   const hasState = state[ref] && state[ref][url]
-  const isFresh = () => dayjs(updated[ref][url]).add(timeout, 'minutes').isBefore(now)
+  const isFresh = () => dayjs(updated[ref][url]).add(timeout, 'minutes').isAfter(now)
   return (hasUpdated && hasState && isFresh())
 }
-
 
 /**
  *  Get Page Meta

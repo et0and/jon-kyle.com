@@ -25,25 +25,25 @@ export default {
       if (!this.$store.state.search[this.query]) {
         this.$store.dispatch('fetchSearch', query)
       }
-    }
+    },
   },
-  data () {
+  data() {
     return {
       query: this.$route.query.query,
     }
   },
-  mounted () {
+  mounted() {
     if (!this.$store.state.search[this.query]) {
       this.$store.dispatch('fetchSearch', this.query)
     }
   },
   computed: {
-    entries () {
+    entries() {
       const entries = this.$store.state.search[this.query]
       if (!entries) return false
       return entries.map(key => this.$store.state.content[key])
-    }
-  }
+    },
+  },
 }
 </script>
 

@@ -5,26 +5,26 @@
 <script>
 export default {
   name: 'LoadingIndicator',
-  data () {
+  data() {
     return {
       text: 'loading-',
-      frame: ''
+      frame: '',
     }
   },
-  mounted () {
+  mounted() {
     this.frame = setInterval(this.tick, 100)
   },
-  destroyed () {
+  destroyed() {
     clearInterval(this.frame)
   },
   methods: {
-    tick () {
+    tick() {
       this.text = (
-        this.text.substring(1, this.text.length) +
-        this.text.substring(0, 1) 
+        this.text.substring(1, this.text.length)
+        + this.text.substring(0, 1)
       )
-    }
-  }
+    },
+  },
 }
 </script>
 

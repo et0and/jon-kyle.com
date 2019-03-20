@@ -8,22 +8,22 @@
 </template>
 
 <script>
-import GlobalHeader from './components/GlobalHeader'
 import removeMarkdown from 'remove-markdown'
+import GlobalHeader from './components/GlobalHeader'
 import { mixin } from './store'
 
 export default {
   name: 'Site',
-  mixins: [ mixin ],
+  mixins: [mixin],
   components: { GlobalHeader },
-  mounted () {
+  mounted() {
     this.$store.dispatch('fetchEntries')
     this.$store.dispatch('fetchOptions')
     if (!this.$store.state.content['/']) {
       this.$store.dispatch('fetchEntry', '/readme.md')
     }
   },
-  metaInfo () {
+  metaInfo() {
     const image = this.page && this.page.image
       ? this.page.image
       : 'https://jon-kyle.com/social.png'
@@ -34,19 +34,17 @@ export default {
       {
         property: 'og:type',
         content: 'website',
-        vmid: 'og:type'
+        vmid: 'og:type',
       },
       {
-        'property': 'og:title',
+        property: 'og:title',
         content: this.page ? this.page.title || this.page.dateFormatted : false,
-        template: (titleChunk) => {
-          return titleChunk ? `${titleChunk} / Jon-Kyle` : 'Jon-Kyle';
-        },
-        'vmid': 'og:title'
-      }
+        template: titleChunk => (titleChunk ? `${titleChunk} / Jon-Kyle` : 'Jon-Kyle'),
+        vmid: 'og:title',
+      },
     ]
 
-    if (this.page && this.page.content && this.$route.name === 'entry') {
+    if (this.page && this.page.content && this.$route && this.$route.name === 'entry') {
       const description = this.page.content
         .split('\n')
         .slice(0, 6)
@@ -58,12 +56,12 @@ export default {
       metaTags.push({
         name: 'description',
         content: formatted,
-        vmid: 'description'
+        vmid: 'description',
       },
       {
         property: 'og:description',
         content: formatted,
-        vmid: 'og:description'
+        vmid: 'og:description',
       })
     }
 
@@ -71,17 +69,17 @@ export default {
       metaTags.push({
         name: 'twitter:card',
         content: 'summary_large_image',
-        vmid: 'og:card'
+        vmid: 'og:card',
       },
       {
         name: 'twitter:image',
         content: image,
-        vmid: 'og:image'
+        vmid: 'og:image',
       },
       {
         property: 'og:image',
         content: image,
-        vmid: 'og:image'
+        vmid: 'og:image',
       })
     }
 
@@ -89,21 +87,19 @@ export default {
       metaTags.push({
         property: 'prerender-status-code',
         content: 404,
-        vmid: 'prerender-status-code'
+        vmid: 'prerender-status-code',
       })
     }
 
     return {
       title: this.page ? this.page.title || this.page.dateFormatted : false,
-      titleTemplate: (titleChunk) => {
-        return titleChunk ? `${titleChunk} / Jon-Kyle` : 'Jon-Kyle';
-      },
+      titleTemplate: titleChunk => (titleChunk ? `${titleChunk} / Jon-Kyle` : 'Jon-Kyle'),
       meta: metaTags,
       style: [{
-        cssText: this.$store.state.options.night ? ':root { --fg: 255, 255, 255; --bg: 0, 0, 0 }' : ''
-      }]
+        cssText: this.$store.state.options.night ? ':root { --fg: 255, 255, 255; --bg: 0, 0, 0 }' : '',
+      }],
     }
-  }
+  },
 }
 </script>
 
@@ -125,10 +121,10 @@ html {
   font-size: 16px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  -moz-font-feature-settings:"kern" 1; 
-  -ms-font-feature-settings:"kern" 1; 
-  -o-font-feature-settings:"kern" 1; 
-  -webkit-font-feature-settings:"kern" 1; 
+  -moz-font-feature-settings:"kern" 1;
+  -ms-font-feature-settings:"kern" 1;
+  -o-font-feature-settings:"kern" 1;
+  -webkit-font-feature-settings:"kern" 1;
   font-feature-settings:"kern" 1;
   font-kerning: normal;
 }

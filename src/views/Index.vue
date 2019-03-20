@@ -11,12 +11,11 @@ export default {
   name: 'index',
   components: { IndexEntries, LoadingIndicator },
   computed: {
-    entries () {
+    entries() {
       const entries = this.$store.state.content['/entries']
       if (!entries) return
-      else return entries
-    }
-  }
+      return entries
+    },
+  },
 }
 </script>
-

@@ -22,8 +22,8 @@
 </template>
 
 <script>
-import ContentEntry from './ContentEntry'
 import Paginate from 'vuejs-paginate'
+import ContentEntry from './ContentEntry'
 
 export default {
   name: 'FeedEntries',
@@ -31,39 +31,39 @@ export default {
   watch: {
     '$route.query.page': function (page) {
       this.page = parseInt(page) || 1
-    }
+    },
   },
   props: {
     entries: {
       type: Array,
-      default: () => ([])
-    }
+      default: () => ([]),
+    },
   },
-  data () {
+  data() {
     return {
-      page: parseInt(this.$route.query.page) || 1
+      page: parseInt(this.$route.query.page) || 1,
     }
   },
   computed: {
-    range () {
+    range() {
       return this.$store.state.ui.range
     },
-    count () {
+    count() {
       return Math.ceil(this.entries.length / this.range)
     },
-    visible () {
+    visible() {
       const page = this.page - 1
       return this.entries
         .slice((page * this.range), ((page * this.range) + this.range))
-    }
+    },
   },
   methods: {
-    onPaginationClick (page) {
-      let newQuery = Object.assign({}, this.$route.query, { page: page })
+    onPaginationClick(page) {
+      const newQuery = Object.assign({}, this.$route.query, { page })
       if (page === 1) delete newQuery.page
       this.$router.push({ path: this.$route.path, query: newQuery })
-    }
-  }
+    },
+  },
 }
 </script>
 

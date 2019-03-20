@@ -16,18 +16,18 @@
 export default {
   name: 'IndexEntries',
   computed: {
-    entries () {
+    entries() {
       const entries = this.$store.state.content['/entries']
-      if (!entries) return [ ]
+      if (!entries) return []
       return entries.pages
         .map(key => this.$store.state.content[key])
         .sort((a, b) => (b.date.replace(/-/g, '') - a.date.replace(/-/g, '')))
     },
-    months () {
-      if (!this.entries.length) return [ ]
+    months() {
+      if (!this.entries.length) return []
       return this.entries
-    }
-  }
+    },
+  },
 }
 </script>
 

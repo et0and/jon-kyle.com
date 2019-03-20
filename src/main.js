@@ -1,8 +1,8 @@
 import Vue from 'vue'
+import VueMeta from 'vue-meta'
 import App from './App.vue'
 import router from './router'
 import store from './store/index.js'
-import VueMeta from 'vue-meta'
 
 Vue.config.productionTip = false
 

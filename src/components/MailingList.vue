@@ -33,14 +33,14 @@ import xhr from 'xhr'
 
 export default {
   name: 'MailingList',
-  data () {
+  data() {
     return {
       view: 'empty',
-      address: ''
+      address: '',
     }
   },
   methods: {
-    onSubmit (event) {
+    onSubmit(event) {
       const form = this.$refs.form
       event.preventDefault()
       this.view = 'loading'
@@ -48,7 +48,7 @@ export default {
       xhr({
         method: 'post',
         body: new FormData(form),
-        uri: 'https://emailoctopus.com/lists/f54dd2b6-65b9-11e8-a3c9-06b79b628af2/members/embedded/1.1/add'
+        uri: 'https://emailoctopus.com/lists/f54dd2b6-65b9-11e8-a3c9-06b79b628af2/members/embedded/1.1/add',
       }, (err, resp, body) => {
         if (err || resp.statusCode !== 200) {
           this.view = 'error'
@@ -60,8 +60,8 @@ export default {
           }, 2000)
         }
       })
-    }
-  }
+    },
+  },
 }
 </script>
 
