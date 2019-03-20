@@ -169,7 +169,6 @@ export default {
     },
     addWatchers() {
       if (!this.watching && this.entry.content) {
-        window.prerenderReady = true
         this.watching = true
         const els = [...this.$refs.copy.querySelectorAll('[data-src]')]
         els.forEach((el) => {
