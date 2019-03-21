@@ -16,11 +16,9 @@ const CLIENT_ID = process.env.CLIENT_ID
 // defaults
 const subset = ['title', 'date', 'description', 'tags']
 const branches = ['master', 'drafts']
-const timeout = 5
 
 // cache
-let caching = false
-const updated = { }
+let cached = false
 const state = { }
 
 /**
@@ -38,10 +36,10 @@ export function handler (event, context, callback) {
   // format data
   params.full = params.full === 'true'
 
-  // populate state
-  if (!caching) {
+  // cache state
+  if (!cached || event.queryStringParameters.cache) {
     branches.forEach(branch => initializeState('/', branch))
-    caching = true
+    cached = true
   }
 
   // grab the directory
@@ -72,7 +70,10 @@ export function handler (event, context, callback) {
  * Initialize State
  */
 function initializeState (url, ref) {
+  console.log('caching ' + ref)
+  state[ref] = { } // reset
   fetchDirectory(url, ref, true, true)
+    .then(data => console.log('cached ' + ref))
     .catch(err => console.warn(err.message))
 }
 
@@ -132,11 +133,12 @@ function formatPage (page = { }, isFull = false) {
  */
 async function fetchFile (url = '/readme.md', ref = 'master') {
   // return cached if valid
-  if (isPageCached(url, ref)) return state[ref][url]
   const name = path.basename(url)
   const _url = path.join(path.dirname(url), path.basename(name, path.extname(name)))
   const page = { url: _url }
   const src = formatRequestUrl(url, ref)
+
+  if (isPageCached(_url, ref)) return state[ref][_url]
 
   return fetch(src)
     .then(data => data.json())
@@ -262,7 +264,7 @@ function parseContent (_data) {
   if (indexMore >= 0) {
     data.excerpt = content.substring(0, indexMore)
   } else {
-    data.summary = content.substring(0, 400)
+    data.summary = content.replace(/([^\.]*\.){3}/, '')
   }
 
   return { ...data, content }
@@ -282,12 +284,8 @@ function parsePage (data = { }) {
  * Cache Page
  */
 function cachePage (page, ref) {
-  const now = dayjs()
   if (!state[ref]) state[ref] = { }
-  if (!state[ref][page.url]) state[ref][page.url] = { }
-  if (!updated[ref]) updated[ref] = { }
-  Object.assign(state[ref][page.url], page)
-  updated[ref][page.url] = now.format()
+  if (!state[ref][page.url]) state[ref][page.url] = page
   return page
 }
 
@@ -295,11 +293,8 @@ function cachePage (page, ref) {
  * Is Page Cached
  */
 function isPageCached (url, ref) {
-  const now = dayjs()
-  const hasUpdated = updated[ref] && updated[ref][url]
   const hasState = state[ref] && state[ref][url]
-  const isFresh = () => dayjs(updated[ref][url]).add(timeout, 'minutes').isAfter(now)
-  return (hasUpdated && hasState && isFresh())
+  return hasState
 }
 
 /**

@@ -4,7 +4,10 @@
       <li v-for="entry in entries">
         <router-link :to="entry.url">
           <div class="mono">{{entry.date}}</div>
-          <div class="summary"><div v-if="entry.title">{{entry.title}}</div><div class="excerpt">{{cleanup(entry.excerpt || entry.summary)}}</div></div>
+          <div class="summary">
+            <div class="title" v-if="entry.title">{{entry.title}}</div>
+            <div class="excerpt">{{cleanup(entry.excerpt || entry.summary)}}</div>
+          </div>
         </router-link>
       </li>
     </ul>
@@ -61,6 +64,7 @@ ul li a {
 
 .mono { margin-right: 1rem }
 
+.title,
 .summary {
   display: flex;
   white-space: nowrap;
