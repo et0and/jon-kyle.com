@@ -140,8 +140,8 @@ async function fetchFile (url = '/readme.md', ref = 'master') {
 
   return fetch(src)
     .then(data => data.json())
-    // .then(data => new Buffer.from(data.content, 'base64').toString('utf8'))
-    // .then(data => Object.assign(parseContent(data), page))
+    .then(data => new Buffer.from(data.content, 'base64').toString('utf8'))
+    .then(data => Object.assign(parseContent(data), page))
     // .then(data => parsePage(data))
     .then(data => {
       console.log('fetched ' + src)
@@ -159,7 +159,6 @@ function fetchDirectory (url = '/', ref = 'master') {
   return fetch(formatRequestUrl(url, ref))
     .then(data => data.json())
     // temp
-    .then(data => Object.assign(data, { pages: [ ]}))
     .then(data => parsePageData(data, url))
     // .then(page => fetchPageContent(page, ref))
     // .then(page => achePage(page, ref))
