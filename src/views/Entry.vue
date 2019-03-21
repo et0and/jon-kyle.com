@@ -3,12 +3,16 @@
     <ContentEntry :entry="page" v-if="page" :key="page.name" />
     <div class="footer">
       <div v-if="next">
-        Next<br>
-        <router-link :to="next.url">{{next.dateFormatted}}</router-link>
+        <router-link :to="next.url">
+          Newer<br>
+          <div v-if="next.title">{{next.title}}</div>{{next.dateFormatted}}
+         </router-link>
       </div>
       <div v-if="prev">
-        Previous<br>
-        <router-link :to="prev.url">{{prev.dateFormatted}}</router-link>
+        <router-link :to="prev.url">
+          Older<br>
+          <div v-if="prev.title">{{prev.title}}</div>{{prev.dateFormatted}}
+         </router-link>
       </div>
     </div>
   </div>
@@ -30,14 +34,14 @@ export default {
       return this.$store.state.content['/entries']
     },
     prev() {
-      // if (!this.entries || !this.page) return
-      // const index = this.entries.pages.indexOf(this.page.url)
-      // return this.$store.state.content[this.entries.pages[index - 1]]
+      if (!this.entries || !this.page) return
+      const index = this.entries.pages.indexOf(this.page.url)
+      return this.$store.state.content[this.entries.pages[index - 1]]
     },
     next() {
-      // if (!this.entries || !this.page) return
-      // const index = this.entries.pages.indexOf(this.page.url)
-      // return this.$store.state.content[this.entries.pages[index + 1]]
+      if (!this.entries || !this.page) return
+      const index = this.entries.pages.indexOf(this.page.url)
+      return this.$store.state.content[this.entries.pages[index + 1]]
     },
   },
 }

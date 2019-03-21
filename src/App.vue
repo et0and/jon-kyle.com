@@ -18,16 +18,17 @@ export default {
   components: { GlobalHeader },
   mounted() {
     this.$store.dispatch('fetchOptions')
-    this.$store.dispatch('fetchPage', this.$route.path)
-    if (this.$route.path === '/' || this.$route.path === '/index') {
-      this.$store.dispatch('fetchPage', '/entries')
+    this.$store.dispatch('fetchPage', '/entries')
+    if (this.$route.path !== '/' && this.$route.path !== '/index') {
+      this.$store.dispatch('fetchPage', this.$route.path)
     }
     setTimeout(() => { window.prerenderReady = true }, 500)
   },
   watch: {
     '$route.path': function (value) {
-      if (this.$route.path === '/' || this.$route.path === '/index') value = '/entries'
-      this.$store.dispatch('fetchPage', value)
+      if (this.$route.path !== '/' && this.$route.path !== '/index') {
+        this.$store.dispatch('fetchPage', this.$route.path)
+      }
     }
   },
   metaInfo() {

@@ -8,7 +8,10 @@
       <li v-for="text in index" v-html="text"></li>
     </ol>
     <div v-if="(truncate && entry.excerpt) || entry._loaded" class="copy" ref="copy" v-html="copy" />
-    <PlaceholderText v-else class="copy" />
+    <div class="continue-container" v-if="ed">
+      <a :href="entry.url" class="continue-reading">Continue reading</a>
+    </div>
+    <PlaceholderText v-if="(!truncate && !entry.excerpt) || !entry._loaded" class="copy" />
   </div>
 </template>
 
@@ -120,13 +123,6 @@ export default {
 
       // content
       if (content) {
-        if (this.truncate) {
-          content = content.replace(
-            /<!-- more -->([\s\S]*|$)/gm,
-            `<a href="${url}" class="continue-reading">Continue reading</a>`,
-          )
-        }
-
         let output = md
           .render(content, { url: this.entry.url })
           .replace(/\[(.*?)\]/g, '($1)')
@@ -229,5 +225,9 @@ export default {
 <style scoped>
 .content-entry {
   padding: 1rem;
+}
+
+.continue-container {
+  grid-column: 1 / -1;
 }
 </style>

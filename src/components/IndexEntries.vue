@@ -44,7 +44,7 @@ export default {
 
 ul {
   list-style: none;
-  margin: 0 1rem;
+  margin: 1rem;
   white-space: nowrap;
 }
 

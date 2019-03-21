@@ -35,7 +35,11 @@ const store = new Vuex.Store({
     },
     setPage(state, payload = { }) {
       Object.values(payload).forEach(page => {
-        Vue.set(state.content, page.url, Object.assign({ }, state.content[page.url], page))
+        const current = state.content[page.url] || { }
+        const data = Object.assign({ }, current, page, {
+          _loaded: current._loaded || page._loaded
+        })
+        Vue.set(state.content, page.url, data)
       })
     },
     setSearch(state, payload = { }) {
