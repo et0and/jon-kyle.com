@@ -137,11 +137,16 @@ async function fetchFile (url = '/readme.md', ref = 'master') {
   const name = path.basename(url)
   const _url = path.join(path.dirname(url), path.basename(name, path.extname(name)))
   const page = { url: _url }
+  const src = formatFileUrl(url, ref)
 
-  return fetch(formatFileUrl(url, ref))
+  return fetch(src)
     .then(data => data.text())
     .then(data => Object.assign(parseContent(data), page))
     .then(data => parsePage(data))
+    .then(data => {
+      console.log('fetched ' + src)
+      return data
+    })
     .then(page => cachePage(page, ref))
 }
 

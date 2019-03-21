@@ -26,7 +26,7 @@ export default {
   },
   watch: {
     '$route.path': function (value) {
-      if (this.$route.path === '/') value = '/entries'
+      if (this.$route.path === '/' || this.$route.path === '/index') value = '/entries'
       this.$store.dispatch('fetchPage', value)
     }
   },

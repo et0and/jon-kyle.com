@@ -19,9 +19,6 @@ export default {
   metaInfo() {
     return { title: 'About' }
   },
-  mounted() {
-
-  },
   computed: {
     content() {
       if (typeof this.page !== 'object' || !this.page.content) return

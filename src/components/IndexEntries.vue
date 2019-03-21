@@ -22,6 +22,7 @@ export default {
       if (!entries) return []
       return entries.pages
         .map(key => this.$store.state.content[key])
+        .filter(page => page)
         .sort((a, b) => (b.date.replace(/-/g, '') - a.date.replace(/-/g, '')))
     }
   },
