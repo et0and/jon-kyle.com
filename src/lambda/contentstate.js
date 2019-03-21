@@ -1,4 +1,3 @@
-import removeMarkdown from 'remove-markdown'
 import * as matter from 'gray-matter'
 import fetch from 'node-fetch'
 import dotenv from 'dotenv'
@@ -141,7 +140,7 @@ async function fetchFile (url = '/readme.md', ref = 'master') {
 
   return fetch(src)
     .then(data => data.json())
-    .then(data => new Buffer(data.content, 'base64').toString('utf8'))
+    .then(data => new Buffer.from(data.content, 'base64').toString('utf8'))
     .then(data => Object.assign(parseContent(data), page))
     .then(data => parsePage(data))
     .then(data => {
@@ -159,6 +158,7 @@ function fetchDirectory (url = '/', ref = 'master') {
   if (isPageCached(url, ref)) return state[ref][url]
   return fetch(formatRequestUrl(url, ref))
     .then(data => data.json())
+    .then(data => Object.assign(data, { pages: [ ]}))
     .then(data => parsePageData(data, url))
     .then(page => fetchPageContent(page, ref))
     .then(page => cachePage(page, ref))
@@ -221,7 +221,7 @@ function fetchPageContent (page, ref) {
       const src = formatRequestUrl(page.url + '/' + page._src, ref)
       return fetch(src)
         .then(data => data.json())
-        .then(data => new Buffer(data.content, 'base64').toString('utf8'))
+        .then(data => new Buffer.from(data.content, 'base64').toString('utf8'))
         .then(data => Object.assign(parseContent(data), page))
         .then(data => parsePage(data))
         .then(data => {
@@ -269,10 +269,10 @@ function parseContent (_data) {
 function parsePage (data = { }) {
   const output = { }
   output.name = path.basename(data.url)
-  // if (!isNaN(output.name.charAt(0))) {
+  if (!isNaN(output.name.charAt(0))) {
     output.date = output.name.substring(0, 10)
     output.dateFormatted = dayjs(output.date).format('MMMM DD, YYYY')
-  // }
+  }
   return Object.assign(data, output)
 }
 
