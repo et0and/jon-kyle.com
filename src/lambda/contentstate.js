@@ -215,18 +215,18 @@ function parsePageData (data, url) {
  * Fetch Page Content
  */
 function fetchPageContent (page, ref) {
-  return page
   return new Promise((resolve, reject) => {
     if (page._src) {
       const src = formatRequestUrl(page.url + '/' + page._src, ref)
-      return fetch(src)
+      fetch(src)
         .then(data => data.json())
-        .then(data => new Buffer.from(data.content, 'base64').toString('utf8'))
-        .then(data => Object.assign(parseContent(data), page))
-        .then(data => parsePage(data))
+        // .then(data => new Buffer.from(data.content, 'base64').toString('utf8'))
+        // .then(data => Object.assign(parseContent(data), page))
+        // .then(data => parsePage(data))
         .then(data => {
           console.log('fetched ' + src)
-          return resolve(data)
+          return resolve(page)
+          // return resolve(data)
         })
         .catch(err => {
           console.log('fetch failed ' + src)
@@ -234,7 +234,7 @@ function fetchPageContent (page, ref) {
           resolve(page)
         })
     } else {
-      return resolve(page)
+      resolve(page)
     }
   })
 }
