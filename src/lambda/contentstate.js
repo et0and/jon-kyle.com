@@ -212,12 +212,19 @@ function parsePageData (data, url) {
 function fetchPageContent (page, ref) {
   return new Promise((resolve, reject) => {
     if (page._src) {
-      return fetch(formatFileUrl(page.url + '/' + page._src, ref))
+      const src = formatFileUrl(page.url + '/' + page._src, ref)
+      return fetch(src)
         .then(data => data.text())
         .then(data => Object.assign(parseContent(data), page))
         .then(data => parsePage(data))
-        .then(resolve)
-        .catch(err => resolve(page))
+        .then(data => {
+          console.log('fetched ' + src)
+          return resolve(data)
+        })
+        .catch(err => {
+          console.log('fetch failed ' + src)
+          resolve(page)
+        })
     } else {
       return resolve(page)
     }
