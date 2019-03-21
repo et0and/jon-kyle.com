@@ -174,7 +174,7 @@ function formatRequestUrl (url, ref) {
  * Format File URL
  */
 function formatFileUrl (url, ref) {
-  return CLIENT_RAW + ref + url
+  return CLIENT_RAW + ref + url + '?client_id=' + CLIENT_ID + '&client_secret=' + CLIENT_SECRET
 }
 
 /**
