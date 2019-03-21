@@ -230,6 +230,7 @@ function fetchPageContent (page, ref) {
         })
         .catch(err => {
           console.log('fetch failed ' + src)
+          console.log(err)
           resolve(page)
         })
     } else {
