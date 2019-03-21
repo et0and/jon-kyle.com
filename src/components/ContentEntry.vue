@@ -118,7 +118,7 @@ export default {
       let { excerpt, content, name, url } = this.entry
 
       // excerpt
-      if (this.truncate && excerpt) content = excerpt
+      if ((this.truncate && excerpt) || !this.entry._loaded) content = excerpt
 
       // content
       if (content) {

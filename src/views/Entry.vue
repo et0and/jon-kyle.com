@@ -4,14 +4,16 @@
     <div class="footer">
       <div v-if="next">
         <router-link :to="next.url">
-          Newer<br>
-          <div v-if="next.title">{{next.title}}</div>{{next.dateFormatted}}
+          <span>Newer</span><br>
+          <div>{{next.dateFormatted}}</div>
+          <div v-if="next.title">{{next.title}}</div>
          </router-link>
       </div>
       <div v-if="prev">
         <router-link :to="prev.url">
-          Older<br>
-          <div v-if="prev.title">{{prev.title}}</div>{{prev.dateFormatted}}
+          <span>Older</span><br>
+          <div>{{prev.dateFormatted}}</div>
+          <div v-if="prev.title">{{prev.title}}</div>
          </router-link>
       </div>
     </div>
@@ -57,4 +59,7 @@ export default {
   flex: 1;
   text-align: center;
 }
+
+.footer a { text-decoration: none }
+.footer a span { text-decoration: underline }
 </style>
