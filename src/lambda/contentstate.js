@@ -158,7 +158,7 @@ function fetchDirectory (url = '/', ref = 'master') {
   if (isPageCached(url, ref)) return state[ref][url]
   return fetch(formatRequestUrl(url, ref))
     .then(data => data.json())
-    // .then(data => parsePageData(data, url))
+    .then(data => parsePageData(data, url))
     .then(page => fetchPageContent(page, ref))
     .then(page => cachePage(page, ref))
 }
@@ -181,6 +181,7 @@ function formatFileUrl (url, ref) {
  * Parse Page Data
  */
 function parsePageData (data, url) {
+  console.log('data', url, data)
   return data
     .filter(file => (file.name.substring(0, 1) !== '.'))
     .reduce((res, cur, i, arr) => {
