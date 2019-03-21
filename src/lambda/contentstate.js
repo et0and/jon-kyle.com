@@ -222,7 +222,7 @@ function fetchPageContent (page, ref) {
         .then(data => data.json())
         .then(data => new Buffer.from(data.content, 'base64').toString('utf8'))
         .then(data => Object.assign(parseContent(data), page))
-        // .then(data => parsePage(data))
+        .then(data => parsePage(data))
         .then(data => {
           console.log('fetched ' + src)
           return resolve(page)
@@ -249,19 +249,19 @@ function parseContent (_data) {
   content = content.trim()
 
   // title
-  // if (content && content.substring(0, 2) === '# ') {
-  //   data.title = content.substring(2, content.indexOf('\n'))
-  // }
+  if (content && content.substring(0, 2) === '# ') {
+    data.title = content.substring(2, content.indexOf('\n'))
+  }
 
   // content
-  // if (data.title) {
-  //   content = content.substring(content.indexOf('\n'), content.length).trim()
-  // }
+  if (data.title) {
+    content = content.substring(content.indexOf('\n'), content.length).trim()
+  }
 
   // excerpt
-  // const indexMore = content.indexOf('<!-- more -->')
-  // if (indexMore >= 0) data.excerpt = content.substring(0, indexMore)
-  // else data.summary = content.substring(0, 400)
+  const indexMore = content.indexOf('<!-- more -->')
+  if (indexMore >= 0) data.excerpt = content.substring(0, indexMore)
+  else data.summary = content.substring(0, 400)
 
   return { ...data, content }
 }
