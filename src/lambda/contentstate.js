@@ -1,3 +1,4 @@
+import removeMarkdown from 'remove-markdown'
 import * as matter from 'gray-matter'
 import fetch from 'node-fetch'
 import dotenv from 'dotenv'
@@ -111,14 +112,18 @@ async function getPage (url = '/', ref = 'master', recursive = true, isFull = fa
 
 function formatPage (page = { }, isFull = false) {
   const output = Object.assign({ }, page)
-  if (output.content.indexOf('404' === 0)) {
+  if (output.content && output.content.indexOf('404') === 0) {
     output.status = 404
   }
   if (!isFull) {
     output.pages = [ ]
     output.files = [ ]
+    output._loaded = false
     delete output.content
+  } else {
+    output._loaded = true
   }
+  delete output._src
   delete output._deps
   return output
 }
@@ -136,6 +141,7 @@ async function fetchFile (url = '/readme.md', ref = 'master') {
   return fetch(formatFileUrl(url, ref))
     .then(data => data.text())
     .then(data => Object.assign(parseContent(data), page))
+    .then(data => parsePage(data))
     .then(page => cachePage(page, ref))
 }
 
@@ -208,7 +214,9 @@ function fetchPageContent (page, ref) {
     if (page._src) {
       return fetch(formatFileUrl(page.url + '/' + page._src, ref))
         .then(data => data.text())
-        .then(data => resolve(Object.assign(parseContent(data), page)))
+        .then(data => Object.assign(parseContent(data), page))
+        .then(data => parsePage(data))
+        .then(resolve)
         .catch(err => resolve(page))
     } else {
       return resolve(page)
@@ -235,7 +243,22 @@ function parseContent (_data) {
     content = content.substring(content.indexOf('\n'), content.length).trim()
   }
 
+  // excerpt
+  const indexMore = content.indexOf('<!-- more -->')
+  if (indexMore >= 0) data.excerpt = content.substring(0, indexMore)
+  else data.summary = content.substring(0, 400)
+
   return { ...data, content }
+}
+
+function parsePage (data = { }) {
+  const output = { }
+  output.name = path.basename(data.url)
+  if (!isNaN(output.name.charAt(0))) {
+    output.date = output.name.substring(0, 10)
+    output.dateFormatted = dayjs(output.date).format('MMMM DD, YYYY')
+  }
+  return Object.assign(data, output)
 }
 
 /**

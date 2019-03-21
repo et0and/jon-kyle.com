@@ -1,13 +1,13 @@
 <template>
   <div class="content-entry copy">
     <section>
-      <h2 v-if="title">{{title}}</h2>
+      <h2 v-if="entry.title">{{entry.title}}</h2>
       <router-link :to="entry.url"><time :datetime="entry.date">{{entry.dateFormatted}}</time></router-link>
     </section>
     <ol v-if="!truncate && index">
       <li v-for="text in index" v-html="text"></li>
     </ol>
-    <div v-if="entry._loaded" class="copy" ref="copy" v-html="copy" />
+    <div v-if="(truncate && entry.excerpt) || entry._loaded" class="copy" ref="copy" v-html="copy" />
     <PlaceholderText v-else class="copy" />
   </div>
 </template>
@@ -93,7 +93,7 @@ export default {
   },
   created() {
     if (!this.entry._loaded) {
-      this.$store.dispatch('fetchEntry', this.entry.src)
+      this.$store.dispatch('fetchPage', this.entry.url)
     }
   },
   mounted() {
@@ -107,25 +107,19 @@ export default {
     'entry.content': 'contentUpdated',
   },
   computed: {
-    title() {
-      const { content } = this.entry
-      if (content && content.substring(0, 2) === '# ') {
-        return content.substring(2, content.indexOf('\n'))
-      }
-    },
     index() {
       if (!this.entry.index) return
       return this.entry.index
         .map(text => mdMicro.render(text))
     },
     copy() {
-      let { content, name, url } = this.entry
+      let { excerpt, content, name, url } = this.entry
 
+      // excerpt
+      if (this.truncate && excerpt) content = excerpt
+
+      // content
       if (content) {
-        if (this.title) {
-          content = content.substring(content.indexOf('\n'), content.length).trim()
-        }
-
         if (this.truncate) {
           content = content.replace(
             /<!-- more -->([\s\S]*|$)/gm,

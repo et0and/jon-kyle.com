@@ -5,7 +5,7 @@ export function getEntryMeta(entry) {
   const date = name.substring(0, 10)
   const url = `/${entry.path.replace(/.md/g, '')}`
   const src = `/${formatEntrySrc(entry.path)}`
-  const dateFormatted = dayjs(date).format('MMM DD, YYYY')
+  const dateFormatted = dayjs(date).format('MMMM DD, YYYY')
   return {
     name, date, src, url, dateFormatted,
   }

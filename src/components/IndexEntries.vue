@@ -2,9 +2,9 @@
   <div class="container-index">
     <ul>
       <li v-for="entry in entries">
-        <router-link :to="entry.url" class="mono">
-          <h2>{{entry.title}}</h2>
-          {{entry.dateFormatted}}
+        <router-link :to="entry.url">
+          <div class="mono">{{entry.date}}</div>
+          <div class="summary"><div v-if="entry.title">{{entry.title}}</div><div class="excerpt">{{cleanup(entry.excerpt || entry.summary)}}</div></div>
         </router-link>
       </li>
     </ul>
@@ -12,6 +12,7 @@
 </template>
 
 <script>
+import removeMarkdown from 'remove-markdown'
 
 export default {
   name: 'IndexEntries',
@@ -22,12 +23,16 @@ export default {
       return entries.pages
         .map(key => this.$store.state.content[key])
         .sort((a, b) => (b.date.replace(/-/g, '') - a.date.replace(/-/g, '')))
-    },
-    months() {
-      if (!this.entries.length) return []
-      return this.entries
-    },
+    }
   },
+  methods: {
+    cleanup (value) {
+      return removeMarkdown(value, {
+        stripListLeaders: true,
+        useImgAltText: false
+      })
+    }
+  }
 }
 </script>
 
@@ -37,10 +42,40 @@ export default {
 }
 
 ul {
-  margin: 1rem;
   list-style: none;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
+  margin: 0 1rem;
+  white-space: nowrap;
+}
+
+ul li:not(:first-child) {
+  border-top: 1px solid currentColor;
+}
+
+ul li a {
+  display: flex;
   grid-gap: 1rem;
+  padding: 0.5rem 0;
+  text-decoration: none;
+}
+
+.mono { margin-right: 1rem }
+
+.summary {
+  display: flex;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.excerpt {
+  display: inline-block;
+  color: rgba(var(--fg), 0.25);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.summary > div:nth-child(2) {
+  margin-left: 1rem;
 }
 </style>

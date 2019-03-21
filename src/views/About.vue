@@ -20,13 +20,11 @@ export default {
     return { title: 'About' }
   },
   mounted() {
-    if (!this.page) {
-      this.$store.dispatch('fetchEntry', '/about.md')
-    }
+
   },
   computed: {
     content() {
-      if (typeof this.page !== 'object') return
+      if (typeof this.page !== 'object' || !this.page.content) return
       const { location, branch } = this.$store.state.api
       return this.page.content
         .replace('jon-kyle.jpg', `${location + branch}/jon-kyle.jpg`)

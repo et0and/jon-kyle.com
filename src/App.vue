@@ -17,12 +17,18 @@ export default {
   mixins: [mixin],
   components: { GlobalHeader },
   mounted() {
-    this.$store.dispatch('fetchEntries')
     this.$store.dispatch('fetchOptions')
-    if (!this.$store.state.content['/']) {
-      this.$store.dispatch('fetchEntry', '/readme.md')
+    this.$store.dispatch('fetchPage', this.$route.path)
+    if (this.$route.path === '/' || this.$route.path === '/index') {
+      this.$store.dispatch('fetchPage', '/entries')
     }
     setTimeout(() => { window.prerenderReady = true }, 500)
+  },
+  watch: {
+    '$route.path': function (value) {
+      if (this.$route.path === '/') value = '/entries'
+      this.$store.dispatch('fetchPage', value)
+    }
   },
   metaInfo() {
     const image = this.page && this.page.image
@@ -96,7 +102,7 @@ export default {
         vmid: 'prerender-status-code',
       })
     }
-
+    
     return {
       title: this.page ? this.page.title || this.page.dateFormatted : false,
       titleTemplate: titleChunk => (titleChunk ? `${titleChunk} / Jon-Kyle` : 'Jon-Kyle'),
@@ -300,7 +306,8 @@ code {
 .copy figure:not(.transparent):not(.video) { background: rgba(var(--fg), 0.2) }
 .copy figure.ratio img { height: 0; position: absolute; top: 0; left: 0; height: 100%; width: 100%; }
 
-.copy .footnote-ref a { font-family: var(--mono); text-decoration: none; }
+.copy sup { vertical-align: top }
+.copy .footnote-ref a { font-family: var(--mono); text-decoration: none; margin-top: }
 .copy a.footnote-backref { text-decoration: none; color: rgba(var(--fg), 0.2) }
 .copy a.footnote-backref:hover { color: rgba(var(--fg), 1) }
 .copy .footnotes blockquote { margin-left: -1rem; text-indent: 0; padding-left: 1rem; }

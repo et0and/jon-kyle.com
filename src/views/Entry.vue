@@ -25,30 +25,19 @@ export default {
   components: {
     ContentEntry,
   },
-  metaInfo() {
-    return { title: this.title }
-  },
   computed: {
     entries() {
       return this.$store.state.content['/entries']
     },
     prev() {
-      if (!this.entries || !this.page) return
-      const index = this.entries.pages.indexOf(this.page.url)
-      return this.$store.state.content[this.entries.pages[index - 1]]
+      // if (!this.entries || !this.page) return
+      // const index = this.entries.pages.indexOf(this.page.url)
+      // return this.$store.state.content[this.entries.pages[index - 1]]
     },
     next() {
-      if (!this.entries || !this.page) return
-      const index = this.entries.pages.indexOf(this.page.url)
-      return this.$store.state.content[this.entries.pages[index + 1]]
-    },
-    title() {
-      if (!this.page) return
-      const { dateFormatted, content } = this.page
-      if (content && content.substring(0, 2) === '# ') {
-        return content.substring(2, content.indexOf('\n'))
-      }
-      return dateFormatted
+      // if (!this.entries || !this.page) return
+      // const index = this.entries.pages.indexOf(this.page.url)
+      // return this.$store.state.content[this.entries.pages[index + 1]]
     },
   },
 }

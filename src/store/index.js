@@ -33,22 +33,9 @@ const store = new Vuex.Store({
       state.options = Object.assign({ }, state.options, payload)
       window.localStorage.setItem('options', JSON.stringify(state.options))
     },
-    setEntry(state, payload = { }) {
-      const data = matter(payload.data)
-      const url = payload.url || '/'
-      Vue.set(state.content, url, {
-        ...state.content[url],
-        ...data.data,
-        content: data.content.trim(),
-        _loaded: true,
-      })
-    },
-    setEntries(state, payload = []) {
-      Vue.set(state.content, '/entries', { pages: [] })
-      payload.forEach((entry) => {
-        const meta = lib.getEntryMeta(entry)
-        state.content['/entries'].pages.push(meta.url)
-        Vue.set(state.content, meta.url, meta)
+    setPage(state, payload = { }) {
+      Object.values(payload).forEach(page => {
+        Vue.set(state.content, page.url, Object.assign({ }, state.content[page.url], page))
       })
     },
     setSearch(state, payload = { }) {
@@ -72,18 +59,13 @@ const store = new Vuex.Store({
       const data = window.localStorage.getItem('options')
       commit('setOptions', JSON.parse(data))
     },
-    fetchEntry({ commit, state }, url = '') {
-      const path = url.replace('/readme', '').replace('.md', '')
-      if (!url) return
-      fetch(state.api.location + state.api.branch + url)
-        .then(response => response.text())
-        .then(data => commit('setEntry', { url: path, data }))
-        .catch(err => console.warn(err))
-    },
-    fetchEntries({ commit, state }) {
-      fetch(`${state.api.endpoint}/state?ref=${state.api.branch}`)
+    fetchPage({ commit, state }, url = '') {
+      // skip redundant fetches
+      if (state.content[url] && state.content[url]._loaded) return
+      // hit the api
+      fetch(`${state.api.endpoint}/contentstate?url=${url}&ref=${state.api.branch}`)
         .then(response => response.json())
-        .then(data => commit('setEntries', data))
+        .then(data => commit('setPage', data))
         .catch(err => console.warn(err))
     },
     fetchSearch({ commit, state }, query) {

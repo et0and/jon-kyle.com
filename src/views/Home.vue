@@ -15,7 +15,7 @@ export default {
       const entries = this.$store.state.content['/entries']
       if (!entries) return
       return entries.pages
-        .map(key => this.$store.state.content[key])
+        .map(url => this.$store.state.content[url])
         .sort((a, b) => (b.date.replace(/-/g, '') - a.date.replace(/-/g, '')))
     },
   },
