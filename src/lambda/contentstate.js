@@ -225,8 +225,7 @@ function fetchPageContent (page, ref) {
         .then(data => parsePage(data))
         .then(data => {
           console.log('fetched ' + src)
-          return resolve(page)
-          // return resolve(data)
+          return resolve(data)
         })
         .catch(err => {
           console.log('fetch failed ' + src)
