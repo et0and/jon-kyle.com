@@ -258,9 +258,12 @@ function parseContent (_data) {
   }
 
   // excerpt
-  // const indexMore = content.indexOf('<!-- more -->')
-  // if (indexMore >= 0) data.excerpt = content.substring(0, indexMore)
-  // else data.summary = content.substring(0, 400)
+  const indexMore = content.indexOf('<!-- more -->')
+  if (indexMore >= 0) {
+    data.excerpt = content.substring(0, indexMore)
+  } else {
+    data.summary = content.substring(0, 400)
+  }
 
   return { ...data, content }
 }
