@@ -220,8 +220,8 @@ function fetchPageContent (page, ref) {
       const src = formatRequestUrl(page.url + '/' + page._src, ref)
       fetch(src)
         .then(data => data.json())
-        // .then(data => new Buffer.from(data.content, 'base64').toString('utf8'))
-        // .then(data => Object.assign(parseContent(data), page))
+        .then(data => new Buffer.from(data.content, 'base64').toString('utf8'))
+        .then(data => Object.assign(parseContent(data), page))
         // .then(data => parsePage(data))
         .then(data => {
           console.log('fetched ' + src)
