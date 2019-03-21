@@ -269,10 +269,10 @@ function parseContent (_data) {
 function parsePage (data = { }) {
   const output = { }
   output.name = path.basename(data.url)
-  if (!isNaN(output.name.charAt(0))) {
+  // if (!isNaN(output.name.charAt(0))) {
     output.date = output.name.substring(0, 10)
     output.dateFormatted = dayjs(output.date).format('MMMM DD, YYYY')
-  }
+  // }
   return Object.assign(data, output)
 }
 
