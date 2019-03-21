@@ -64,7 +64,6 @@ ul li a {
 
 .mono { margin-right: 1rem }
 
-.title,
 .summary {
   display: flex;
   white-space: nowrap;
