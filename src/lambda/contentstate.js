@@ -137,10 +137,11 @@ async function fetchFile (url = '/readme.md', ref = 'master') {
   const name = path.basename(url)
   const _url = path.join(path.dirname(url), path.basename(name, path.extname(name)))
   const page = { url: _url }
-  const src = formatFileUrl(url, ref)
+  const src = formatRequestUrl(url, ref)
 
   return fetch(src)
-    .then(data => data.text())
+    .then(data => data.json())
+    .then(data => new Buffer(data.content, 'base64').toString('utf8'))
     .then(data => Object.assign(parseContent(data), page))
     .then(data => parsePage(data))
     .then(data => {
@@ -167,7 +168,7 @@ function fetchDirectory (url = '/', ref = 'master') {
  * Format Request URL
  */
 function formatRequestUrl (url, ref) {
-  return CLIENT_API + url + '?ref=' + ref + '&client_id=' + CLIENT_ID + '&client_secret=' + CLIENT_SECRET
+  return (CLIENT_API + url).replace(/\/\/+/g, '/').replace(':/', '://') + '?ref=' + ref + '&client_id=' + CLIENT_ID + '&client_secret=' + CLIENT_SECRET
 }
 
 /**
@@ -217,9 +218,10 @@ function parsePageData (data, url) {
 function fetchPageContent (page, ref) {
   return new Promise((resolve, reject) => {
     if (page._src) {
-      const src = formatFileUrl(page.url + '/' + page._src, ref)
+      const src = formatRequestUrl(page.url + '/' + page._src, ref)
       return fetch(src)
-        .then(data => data.text())
+        .then(data => data.json())
+        .then(data => new Buffer(data.content, 'base64').toString('utf8'))
         .then(data => Object.assign(parseContent(data), page))
         .then(data => parsePage(data))
         .then(data => {
