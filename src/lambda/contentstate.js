@@ -192,12 +192,12 @@ function parsePageData (data, url) {
       // markdown
       } else if (extname === '.md') {
         // skip readme.md
-        // if (cur.name !== 'readme.md') {
+        if (cur.name !== 'readme.md') {
         //   res.pages.push(path.join(url, path.basename(cur.name, path.extname(cur.name))))
         //   res._deps.push(path.join(url, cur.name))
-        // } else {
-        //   res._src = cur.name
-        // }
+        } else {
+          res._src = cur.name
+        }
       // file
       } else {
         res.files.push(cur.name)
