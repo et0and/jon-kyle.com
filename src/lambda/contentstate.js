@@ -184,24 +184,24 @@ function parsePageData (data, url) {
   return data
     .filter(file => (file.name.substring(0, 1) !== '.'))
     .reduce((res, cur, i, arr) => {
-      const extname = path.extname(cur.name)
+      // const extname = path.extname(cur.name)
       // directory
-      if (!extname) {
+      // if (!extname) {
       //   res.pages.push(path.join(url, cur.name))
       //   res._deps.push(path.join(url, cur.name))
       // // markdown
-      } else if (extname === '.md') {
+      // } else if (extname === '.md') {
       //   // skip readme.md
-        if (cur.name !== 'readme.md') {
+        // if (cur.name !== 'readme.md') {
       //     res.pages.push(path.join(url, path.basename(cur.name, path.extname(cur.name))))
       //     res._deps.push(path.join(url, cur.name))
-        } else {
-          res._src = cur.name
-        }
-      // file
-      } else {
-        res.files.push(cur.name)
-      }
+        // } else {
+        //   res._src = cur.name
+        // }
+      // // file
+      // } else {
+      //   res.files.push(cur.name)
+      // }
       return res
     }, {
       _deps: [ ],
