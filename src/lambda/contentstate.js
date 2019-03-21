@@ -193,8 +193,8 @@ function parsePageData (data, url) {
       } else if (extname === '.md') {
         // skip readme.md
         if (cur.name !== 'readme.md') {
-        //   res.pages.push(path.join(url, path.basename(cur.name, path.extname(cur.name))))
-        //   res._deps.push(path.join(url, cur.name))
+          res.pages.push(path.join(url, path.basename(cur.name, path.extname(cur.name))))
+          res._deps.push(path.join(url, cur.name))
         } else {
           res._src = cur.name
         }
@@ -215,6 +215,7 @@ function parsePageData (data, url) {
  * Fetch Page Content
  */
 function fetchPageContent (page, ref) {
+  return page
   return new Promise((resolve, reject) => {
     if (page._src) {
       const src = formatRequestUrl(page.url + '/' + page._src, ref)
