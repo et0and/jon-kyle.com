@@ -158,7 +158,7 @@ function fetchDirectory (url = '/', ref = 'master') {
   if (isPageCached(url, ref)) return state[ref][url]
   return fetch(formatRequestUrl(url, ref))
     .then(data => data.json())
-    .then(data => parsePageData(data, url))
+    // .then(data => parsePageData(data, url))
     .then(page => fetchPageContent(page, ref))
     .then(page => cachePage(page, ref))
 }
@@ -222,7 +222,7 @@ function fetchPageContent (page, ref) {
         .then(data => data.json())
         .then(data => new Buffer.from(data.content, 'base64').toString('utf8'))
         .then(data => Object.assign(parseContent(data), page))
-        .then(data => parsePage(data))
+        // .then(data => parsePage(data))
         .then(data => {
           console.log('fetched ' + src)
           return resolve(data)
