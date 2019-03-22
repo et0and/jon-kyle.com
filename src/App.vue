@@ -344,6 +344,10 @@ code {
   width: 100%;
   outline: 0;
 }
+::-webkit-input-placeholder { color: rgba(var(--fg), 0.25); opacity: 1 }
+::-moz-placeholder { color: rgba(var(--fg), 0.25); opacity: 1 }
+:-ms-input-placeholder { color: rgba(var(--fg), 0.25); opacity: 1 }
+:-moz-placeholder { color: rgba(var(--fg), 0.25); opacity: 1 }
 
 @font-face {
   font-family: 'Lars Sans';

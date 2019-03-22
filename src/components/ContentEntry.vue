@@ -1,8 +1,8 @@
 <template>
   <div class="content-entry copy">
-    <section>
-      <h2 v-if="entry.title">{{entry.title}}</h2>
+    <section class="title">
       <router-link :to="entry.url"><time :datetime="entry.date">{{entry.dateFormatted}}</time></router-link>
+      <span v-if="entry.title"> — {{entry.title}}</span>
     </section>
     <ol v-if="!truncate && index">
       <li v-for="text in index" v-html="text"></li>
@@ -224,6 +224,11 @@ export default {
 <style scoped>
 .content-entry {
   padding: 1rem;
+}
+
+.title {
+  text-indent: -1rem;
+  padding-left: 1rem;
 }
 
 .continue-container {

@@ -4,16 +4,20 @@
     <div class="footer">
       <div v-if="next">
         <router-link :to="next.url">
-          <span>Newer</span><br>
-          <div>{{next.dateFormatted}}</div>
-          <div v-if="next.title">{{next.title}}</div>
+          <div class="heading">Newer</div>
+          <div class="title">
+            <span class="underline">{{next.dateFormatted}}</span>
+            <span v-if="next.title"> — {{next.title}}</span>
+          </div>
          </router-link>
       </div>
       <div v-if="prev">
         <router-link :to="prev.url">
-          <span>Older</span><br>
-          <div>{{prev.dateFormatted}}</div>
-          <div v-if="prev.title">{{prev.title}}</div>
+          <div class="heading">Older</div>
+          <div class="title">
+            <span class="underline">{{prev.dateFormatted}}</span>
+            <span v-if="prev.title">— {{prev.title}}</span>
+          </div>
          </router-link>
       </div>
     </div>
@@ -52,14 +56,23 @@ export default {
 <style scoped>
 .footer {
   display: flex;
-  margin-top: 4rem;
+  margin-top: 3rem;
 }
 
 .footer > div {
   flex: 1;
-  text-align: center;
+  padding: 1rem;
 }
 
-.footer a { text-decoration: none }
-.footer a span { text-decoration: underline }
+.footer .title {
+  text-indent: -1rem;
+  padding-left: 2rem;
+}
+
+.footer a { text-decoration: none; display: block; }
+.footer a .underline { text-decoration: underline }
+
+.footer .heading {
+  color: rgba(var(--fg), 0.25)
+}
 </style>

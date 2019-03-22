@@ -52,7 +52,7 @@ ul {
 }
 
 ul li:not(:first-child) {
-  border-top: 1px solid currentColor;
+  border-top: 1px solid rgba(var(--fg), 0.25);
 }
 
 ul li a {
