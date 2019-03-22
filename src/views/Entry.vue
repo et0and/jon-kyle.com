@@ -66,7 +66,7 @@ export default {
 
 .footer .title {
   text-indent: -1rem;
-  padding-left: 2rem;
+  padding-left: 1rem;
 }
 
 .footer a { text-decoration: none; display: block; }

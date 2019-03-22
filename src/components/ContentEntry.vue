@@ -7,7 +7,7 @@
     <ol v-if="!truncate && index">
       <li v-for="text in index" v-html="text"></li>
     </ol>
-    <div v-if="truncate || excerpt || entry._loaded" class="copy" ref="copy" v-html="copy" />
+    <div v-if="truncate || entry.excerpt || entry._loaded" class="copy" ref="copy" v-html="copy" />
     <div class="continue-container" v-if="truncate && entry.excerpt">
       <a :href="entry.url" class="continue-reading">Continue reading</a>
     </div>
