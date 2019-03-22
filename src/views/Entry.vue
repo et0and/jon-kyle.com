@@ -2,8 +2,8 @@
   <div>
     <ContentEntry :entry="page" v-if="page" :key="page.name" />
     <div class="footer">
-      <div v-if="next">
-        <router-link :to="next.url">
+      <div>
+        <router-link v-if="next" :to="next.url">
           <div class="heading">Newer</div>
           <div class="title">
             <span class="underline">{{next.dateFormatted}}</span>
@@ -11,8 +11,8 @@
           </div>
          </router-link>
       </div>
-      <div v-if="prev">
-        <router-link :to="prev.url">
+      <div>
+        <router-link v-if="prev" :to="prev.url">
           <div class="heading">Older</div>
           <div class="title">
             <span class="underline">{{prev.dateFormatted}}</span>
