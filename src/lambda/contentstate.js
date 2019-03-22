@@ -269,7 +269,7 @@ function parseContent (_data) {
 
   // tags
   if (data.tags && Array.isArray(data.tags)) {
-    data.tags = data.tags.map(tag => tag.trim())
+    data.tags = data.tags.filter(tag => tag).map(tag => tag.trim())
   }
 
   return { ...data, content }
