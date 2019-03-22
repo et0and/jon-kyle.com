@@ -1,11 +1,14 @@
 <template>
   <div class="container-feed">
-    <ContentEntry
+    <div
       v-for="entry in visible"
-      :entry="entry"
-      :truncate="true"
       :key="entry.name"
-    />
+    >
+      <ContentEntry
+        :entry="entry"
+        :truncate="true"
+      />
+    </div>
     <paginate
       v-model="page"
       v-if="count > 1"

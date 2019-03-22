@@ -1,6 +1,6 @@
 <template>
   <header>
-    <div class="title">Jon-Kyle</div>
+    <div class="title"><router-link to="/">Jon-Kyle</router-link></div>
     <div><router-link to="/about">About</router-link></div>
     <div>
       <router-link to="/">Feed</router-link><br>
@@ -79,8 +79,11 @@ header {
   margin-top: -0.3rem;
 }
 
-header a.router-link-exact-active {
-  text-decoration: none;
+a { text-decoration: none }
+a:hover { text-decoration: underline }
+
+header div:not(.title) a.router-link-exact-active {
+  text-decoration: line-through;
 }
 
 header > div {

@@ -47,7 +47,7 @@ export default {
 
 ul {
   list-style: none;
-  margin: 1rem;
+  margin: 0.5rem 1rem;
   white-space: nowrap;
 }
 
@@ -63,6 +63,8 @@ ul li a {
 }
 
 .mono { margin-right: 1rem }
+
+ul li a:hover .mono { text-decoration: underline }
 
 .summary {
   display: flex;
