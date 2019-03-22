@@ -43,6 +43,7 @@ const store = new Vuex.Store({
       })
     },
     setSearch(state, payload = { }) {
+      if (!payload.items) return
       const entries = payload.items
         .map((entry, i, arr, src) => {
           const parts = entry.path.split('/')

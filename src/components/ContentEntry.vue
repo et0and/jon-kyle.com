@@ -110,6 +110,7 @@ export default {
   },
   computed: {
     index() {
+      console.log(this.entry)
       if (!this.entry.index) return
       return this.entry.index
         .map(text => mdMicro.render(text))

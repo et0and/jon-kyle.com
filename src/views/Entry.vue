@@ -49,7 +49,7 @@ export default {
       const index = this.entries.pages.indexOf(this.page.url)
       return this.$store.state.content[this.entries.pages[index + 1]]
     },
-  },
+  }
 }
 </script>
 

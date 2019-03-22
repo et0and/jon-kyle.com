@@ -1,24 +1,23 @@
 <template>
-  <div>
-    <div v-if="!entries" class="empty">
-      Loading…
-    </div>
-    <div class="empty" v-else-if="!entries.length">
+  <div v-if="entries">
+    <div class="empty" v-if="!entries.length">
       No results<br>
       Try again maybe?<br><br>
       🙃
     </div>
     <FeedEntries v-else :entries="entries" />
   </div>
+  <LoadingIndicator v-else />
 </template>
 
 <script>
+import LoadingIndicator from '@/components/LoadingIndicator'
 import FeedEntries from '@/components/FeedEntries.vue'
 import * as lib from '@/store/lib'
 
 export default {
   name: 'Search',
-  components: { FeedEntries },
+  components: { FeedEntries, LoadingIndicator },
   watch: {
     '$route.query.query': function (query) {
       this.query = query

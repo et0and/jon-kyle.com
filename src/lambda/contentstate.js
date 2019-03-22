@@ -267,6 +267,11 @@ function parseContent (_data) {
     data.summary = content.replace(/([^\.]*\.){3}/, '')
   }
 
+  // tags
+  if (data.tags && Array.isArray(data.tags)) {
+    data.tags = data.tags.map(tag => tag.trim())
+  }
+
   return { ...data, content }
 }
 
