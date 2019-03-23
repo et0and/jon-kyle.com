@@ -13,7 +13,7 @@ let state = { }
 let cached
 
 export async function handler (event, context) {
-  if (isCached()) {
+  if (!event.queryStringParameters.cache && isCached()) {
     console.log('instagram is cached')
     return {
       statusCode: 200,
