@@ -1,13 +1,21 @@
 <template>
   <div class="container-feed">
     <div
-      v-for="entry in visible"
+      v-for="(entry, i) in visible"
       :key="entry.name"
     >
       <ContentEntry
         :entry="entry"
         :truncate="true"
       />
+      <div class="instagram" v-if="isInstagramVisible && i === 0">
+        <div class="heading">
+          <a href="https://instagram.com/jondashkyle" target="_blank">@jondashkyle</a> on Instagram
+        </div>
+        <div class="gram" v-for="gram in instagram">
+          <a :href="'https://instagram.com/p/' + gram.shortcode" target="_blank"><img :src="gram.url"/></a>
+        </div>
+      </div>
     </div>
     <paginate
       v-model="page"
@@ -48,24 +56,30 @@ export default {
     }
   },
   computed: {
-    range() {
+    range () {
       return this.$store.state.ui.range
     },
-    count() {
+    count () {
       return Math.ceil(this.entries.length / this.range)
     },
-    visible() {
+    visible () {
       const page = this.page - 1
       return this.entries
         .slice((page * this.range), ((page * this.range) + this.range))
     },
+    instagram () {
+      return this.$store.state.instagram.slice(0, 6)
+    },
+    isInstagramVisible () {
+      return this.$route.path === '/' && this.page - 1 === 0
+    }
   },
   methods: {
     onPaginationClick(page) {
       const newQuery = Object.assign({}, this.$route.query, { page })
       if (page === 1) delete newQuery.page
       this.$router.push({ path: this.$route.path, query: newQuery })
-    },
+    }
   },
 }
 </script>
@@ -95,5 +109,38 @@ export default {
   display: block;
   padding: 0.5rem;
   outline: 0;
+}
+
+.instagram {
+  display: grid;
+  margin-top: 4rem;
+  grid-gap: 1rem;
+  grid-template-columns: repeat(6, 1fr);
+  padding: 1rem;
+}
+
+.instagram .heading {
+  grid-column: 1 / -1;
+  text-align: center;
+}
+
+.instagram .gram {
+  padding-bottom: 100%;
+  position: relative;
+  background: rgba(var(--fg), 0.2);
+  width: 100%;
+}
+
+.instagram img {
+  display: block;
+  height: auto;
+  width: 100%;
+  position: absolute;
+}
+
+@media (max-width: 600px) {
+  .instagram {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 </style>

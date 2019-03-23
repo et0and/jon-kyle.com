@@ -19,21 +19,25 @@ const store = new Vuex.Store({
       night: false,
       subscribed: false,
     },
+    instagram: [ ],
     content: { },
     search: { },
   },
   mutations: {
-    setApi(state, payload = { }) {
+    setApi (state, payload = { }) {
       state.api = Object.assign({ }, state.api, payload)
     },
-    setUi(state, payload = { }) {
+    setUi (state, payload = { }) {
       state.ui = Object.assign({ }, state.ui, payload)
     },
-    setOptions(state, payload = { }) {
+    setInstagram (state, payload = [ ]) {
+      state.instagram = payload
+    },
+    setOptions (state, payload = { }) {
       state.options = Object.assign({ }, state.options, payload)
       window.localStorage.setItem('options', JSON.stringify(state.options))
     },
-    setPage(state, payload = { }) {
+    setPage (state, payload = { }) {
       Object.values(payload).forEach(page => {
         const current = state.content[page.url] || { }
         const data = Object.assign({ }, current, page, {
@@ -42,7 +46,7 @@ const store = new Vuex.Store({
         Vue.set(state.content, page.url, data)
       })
     },
-    setSearch(state, payload = { }) {
+    setSearch (state, payload = { }) {
       if (!payload.items) return
       const entries = payload.items
         .map((entry, i, arr, src) => {
@@ -60,22 +64,28 @@ const store = new Vuex.Store({
     },
   },
   actions: {
-    fetchOptions({ commit, state }) {
+    fetchOptions ({ commit, state }) {
       const data = window.localStorage.getItem('options')
       commit('setOptions', JSON.parse(data))
     },
-    fetchPage({ commit, state }, url = '') {
+    fetchInstagram ({ commit, state }) {
+      return fetch(`${state.api.endpoint}/instagram`)
+        .then(response => response.json())
+        .then(data => commit('setInstagram', data))
+        .catch(err => console.warn(err))
+    },
+    fetchPage ({ commit, state }, url = '') {
       // skip redundant fetches
       if (state.content[url] && state.content[url]._loaded) return
       // hit the api
-      fetch(`${state.api.endpoint}/contentstate?url=${url}&ref=${state.api.branch}`)
+      return fetch(`${state.api.endpoint}/contentstate?url=${url}&ref=${state.api.branch}`)
         .then(response => response.json())
         .then(data => commit('setPage', data))
         .catch(err => console.warn(err))
     },
     fetchSearch({ commit, state }, query) {
       if (!query) return
-      fetch(`${state.api.endpoint}/search?query=${query}`)
+      return fetch(`${state.api.endpoint}/search?query=${query}`)
         .then(response => response.json())
         .then(data => commit('setSearch', { query, items: data.items }))
         .catch(err => console.warn(err))

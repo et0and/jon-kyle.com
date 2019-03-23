@@ -30,6 +30,7 @@ export function handler(event, context, callback) {
       callback(null, {
         statusCode: 200,
         contentType: 'json',
+        headers: { 'content-type': 'application/json; charset=utf-8' },
         body: JSON.stringify(data),
       })
     })
@@ -38,6 +39,7 @@ export function handler(event, context, callback) {
       callback(null, {
         statusCode: 401,
         contentType: 'json',
+        headers: { 'content-type': 'application/json; charset=utf-8' },
         body: JSON.stringify({ msg: 'No luck' }),
       })
     })

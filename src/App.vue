@@ -19,6 +19,7 @@ export default {
   mounted() {
     this.$store.dispatch('fetchOptions')
     this.$store.dispatch('fetchPage', '/entries')
+    this.$store.dispatch('fetchInstagram')
     if (this.$route.path !== '/' && this.$route.path !== '/index') {
       this.$store.dispatch('fetchPage', this.$route.path)
     }

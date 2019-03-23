@@ -234,5 +234,6 @@ export default {
 
 .continue-container {
   grid-column: 1 / -1;
+  margin-top: 1rem;
 }
 </style>
