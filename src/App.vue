@@ -315,6 +315,7 @@ code {
 
 .copy a[href*="http"]:after {
   content: '→';
+  font-style: normal;
   display: inline-block;
   transform: rotate(-45deg);
   font-family: var(--mono);
@@ -344,6 +345,7 @@ code {
   width: 100%;
   outline: 0;
 }
+
 ::-webkit-input-placeholder { color: rgba(var(--fg), 0.25); opacity: 1 }
 ::-moz-placeholder { color: rgba(var(--fg), 0.25); opacity: 1 }
 :-ms-input-placeholder { color: rgba(var(--fg), 0.25); opacity: 1 }
