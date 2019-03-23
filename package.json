@@ -15,6 +15,7 @@
     "dayjs": "^1.8.6",
     "dotenv": "^6.2.0",
     "gray-matter": "^4.0.2",
+    "hooper": "^0.1.1",
     "instagram-web-api": "^2.0.0",
     "markdown-it": "^8.4.2",
     "markdown-it-footnote": "^3.0.1",

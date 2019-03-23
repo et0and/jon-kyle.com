@@ -1,6 +1,5 @@
 <template>
   <header>
-    <div class="title"><router-link to="/">Jon-Kyle</router-link></div>
     <div><router-link to="/about">About</router-link></div>
     <div>
       <router-link to="/">Feed</router-link><br>
@@ -12,6 +11,7 @@
           <input placeholder="Search" v-model="search" />
           <div class="filler">{{search.replace(/ /g, '&nbsp;') || 'Search'}}</div>
         </div>
+        <button type="submit" v-if="search">→</button>
       </form>
       <MailingList v-if="mailingListVisible" />
     </div>
@@ -74,7 +74,7 @@ export default {
 header {
   display: grid;
   grid-gap: 1rem;
-  grid-template-columns: repeat(12, 1fr);
+  grid-template-columns: 1fr 1fr 2fr;
   padding: 1rem 1rem 4rem 1rem;
   margin-top: -0.3rem;
 }
@@ -84,10 +84,6 @@ a:hover { text-decoration: underline }
 
 header div:not(.title) a.router-link-exact-active {
   text-decoration: line-through;
-}
-
-header > div {
-  grid-column: span 3;
 }
 
 .toggle-light {
@@ -157,18 +153,18 @@ form > div { position: relative; }
 }
 
 input {
+  font-size: inherit;
+  font-family: var(--sans);
+  border: 0;
   color: inherit;
   background: none;
-  font-size: inherit;
-  font-family: inherit;
-  border: 0;
+  outline: 0;
   width: 100%;
+  padding: 0.1rem 0;
   position: absolute;
   top: 0;
   left: 0;
-  height: 100%;
   width: 100%;
-  outline: 0;
 }
 
 form span {
@@ -179,4 +175,16 @@ form span.commaActive {
   color: rgba(var(--fg), 1);
 }
 
+button {
+  display: block;
+  color: inherit;
+  background: none;
+  border: none;
+  padding: 0 0.5rem;
+  margin-top: -0.2em;
+  font-size: inherit;
+  font-family: inherit;
+  cursor: pointer;
+  outline: 0;
+}
 </style>

@@ -75,4 +75,10 @@ export default {
 .footer .heading {
   color: rgba(var(--fg), 0.25)
 }
+
+@media (max-width: 800px) {
+  .footer {
+    display: block;
+  }
+}
 </style>

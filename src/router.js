@@ -5,7 +5,6 @@ import Search from './views/Search'
 import Entry from './views/Entry'
 import Index from './views/Index'
 import About from './views/About'
-import Work from './views/Work'
 import Home from './views/Home'
 
 Vue.use(Router)
@@ -49,11 +48,6 @@ export default new Router({
       path: '/about',
       name: 'about',
       component: About,
-    },
-    {
-      path: '/work',
-      name: 'work',
-      component: Work,
     }
   ],
 })

@@ -244,8 +244,7 @@ code {
 .copy ol li {
   position: relative;
   list-style: none;
-  text-indent: -1rem;
-  padding-left: 3rem;
+  padding-left: 2rem;
 }
 
 .copy ul li:before {

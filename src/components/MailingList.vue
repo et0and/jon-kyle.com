@@ -81,6 +81,7 @@ button {
   font-size: inherit;
   font-family: inherit;
   cursor: pointer;
+  outline: 0;
 }
 
 span {
