@@ -3,23 +3,22 @@ import fetch from 'node-fetch'
 import dotenv from 'dotenv'
 import dayjs from 'dayjs'
 import path from 'path'
+import fs from 'fs'
 
 // configuration
 dotenv.config()
 
-// auth
+// configuration
 const CLIENT_RAW = 'https://raw.githubusercontent.com/' + process.env.CLIENT_REPO + '/'
 const CLIENT_API = 'https://api.github.com/repos/' + process.env.CLIENT_REPO + '/contents/'
 const CLIENT_SECRET = process.env.CLIENT_SECRET
 const CLIENT_ID = process.env.CLIENT_ID
+const STATE_PATH = '/tmp/content.json'
 
-// defaults
+// content state
 const subset = ['title', 'date', 'description', 'tags']
 const branches = ['master', 'drafts']
-
-// cache
-let cached = false
-const state = { }
+let state = getState()
 
 /**
  * Lambda Handler
@@ -37,7 +36,7 @@ export function handler (event, context, callback) {
   params.full = params.full === 'true'
 
   // cache state
-  if (!cached || event.queryStringParameters.cache) {
+  if (!state || event.queryStringParameters.cache) {
     branches.forEach(branch => initializeState('/', branch))
     cached = true
   }
@@ -71,6 +70,7 @@ export function handler (event, context, callback) {
  */
 function initializeState (url, ref) {
   console.log('caching ' + ref)
+  if (!state) state = { }
   state[ref] = { } // reset
   fetchDirectory(url, ref, true, true)
     .then(data => console.log('cached ' + ref))
@@ -289,8 +289,12 @@ function parsePage (data = { }) {
  * Cache Page
  */
 function cachePage (page, ref) {
+  if (!state) state = { }
   if (!state[ref]) state[ref] = { }
-  if (!state[ref][page.url]) state[ref][page.url] = page
+  if (!state[ref][page.url]) {
+    state[ref][page.url] = page
+    saveState()
+  }
   return page
 }
 
@@ -298,7 +302,7 @@ function cachePage (page, ref) {
  * Is Page Cached
  */
 function isPageCached (url, ref) {
-  const hasState = state[ref] && state[ref][url]
+  const hasState = state && state[ref] && state[ref][url]
   return hasState
 }
 
@@ -309,4 +313,22 @@ function getMetaFromUrl (url) {
     const name = url.replace(/.md/g, '')
     const date = name.substring(0, 10)
     return { name, date }
+}
+
+/**
+ * Get State
+ */
+function getState () {
+  if (fs.existsSync(path)) {
+    return JSON.parse(fs.readFileSync(STATE_PATH, 'utf8'))
+  } else {
+    return false
+  }
+}
+
+/**
+ * Save State
+ */
+function saveState () {
+  return fs.writeFileSync(STATE_PATH, JSON.stringify(state))
 }
