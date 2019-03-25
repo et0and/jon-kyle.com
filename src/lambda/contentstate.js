@@ -23,7 +23,7 @@ let state = getState()
 /**
  * Lambda Handler
  */
-export function handler (event, context, callback) {
+export async function handler (event, context) {
   const params = Object.assign({
     full: false,
     ref: 'master',
@@ -38,30 +38,29 @@ export function handler (event, context, callback) {
   // cache state
   if (!state || event.queryStringParameters.cache) {
     branches.forEach(branch => initializeState('/', branch))
-    cached = true
   }
 
   // grab the directory
-  getPage(params.url, params.ref, true, true)
+  return getPage(params.url, params.ref, true, true)
     .then(data => onSuccess(data))
     .catch(err => onError(err))
 
   function onSuccess (data) {
-    callback(null, {
+    return {
       statusCode: 200,
       contentType: 'json',
       headers: { 'content-type': 'application/json; charset=utf-8' },
       body: JSON.stringify(data)
-    })
+    }
   }
 
   function onError (err) {
-    callback(null, {
+    return {
       statusCode: 200,
       contentType: 'json',
       headers: { 'content-type': 'application/json; charset=utf-8' },
       body: JSON.stringify({ message: 'Not found' })
-    })
+    }
   }
 }
 
@@ -293,6 +292,7 @@ function cachePage (page, ref) {
   if (!state[ref]) state[ref] = { }
   if (!state[ref][page.url]) {
     state[ref][page.url] = page
+    console.log(`(${ref}) ${page.url} cached`)
     saveState()
   }
   return page
@@ -320,6 +320,7 @@ function getMetaFromUrl (url) {
  */
 function getState () {
   if (fs.existsSync(path)) {
+    console.log('state fetched')
     return JSON.parse(fs.readFileSync(STATE_PATH, 'utf8'))
   } else {
     return false
