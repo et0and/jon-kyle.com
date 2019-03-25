@@ -32,10 +32,19 @@ export default {
       }
     }
   },
+  computed: {
+    pageImage () {
+      let image = this.page && this.page.image
+      if (image) {
+        if (image.indexOf('http') === 0) return image
+        else return `https://raw.githubusercontent.com/jondashkyle/archive/master${this.page.url}/${image}`
+      } else {
+        return 'https://jon-kyle.com/social.png'
+      }
+    }
+  },
   metaInfo() {
-    const image = this.page && this.page.image
-      ? this.page.image
-      : 'https://jon-kyle.com/social.png'
+    const image = this.pageImage
 
     const metaTags = [
       { charset: 'utf-8' },
@@ -113,7 +122,7 @@ export default {
         cssText: this.$store.state.options.night ? ':root { --fg: 255, 255, 255; --bg: 0, 0, 0 }' : '',
       }],
     }
-  },
+  }
 }
 </script>
 

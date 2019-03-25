@@ -33,7 +33,7 @@ const md = markdownIt({
     switch (token.type) {
       case 'image':
         if (token.attrObj.src && token.attrObj.src.substring(0, 4) !== 'http') {
-          token.attrObj['data-src'] = `https://raw.githubusercontent.com/jondashkyle/archive/drafts${env.url}/${token.attrObj.src}`
+          token.attrObj['data-src'] = `https://raw.githubusercontent.com/jondashkyle/archive/master${env.url}/${token.attrObj.src}`
           token.attrs.splice(0, 1)
           delete token.attrObj.src
         }
