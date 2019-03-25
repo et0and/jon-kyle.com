@@ -329,6 +329,7 @@ code {
   transform: rotate(-45deg);
   font-family: var(--mono);
   text-indent: 0;
+  white-space: nowrap;
 }
 
 .copy blockquote {
