@@ -40,7 +40,9 @@ export default {
     entries() {
       const entries = this.$store.state.search[this.query]
       if (!entries) return false
-      return entries.map(key => this.$store.state.content[key])
+      return entries
+        .map(key => this.$store.state.content[key])
+        .filter(page => page.visible !== false)
     },
   },
 }
