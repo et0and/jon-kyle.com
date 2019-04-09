@@ -1,7 +1,10 @@
 <template>
   <div class="content-entry copy">
     <section class="title">
-      <time :datetime="entry.date" @click="onPermalink(entry)">{{entry.dateFormatted}}</time>
+      <div>
+        <time :datetime="entry.date" @click="onPermalink(entry)">{{entry.dateFormatted}}</time>
+        <span v-if="day">, Day {{day}}</span>
+      </div>
       <div class="mono" v-if="entry.miles">{{entry.miles}}mi</div>
     </section>
     <ol v-if="!truncate && index">
@@ -84,6 +87,9 @@ export default {
     truncate: {
       type: Boolean,
       default: false,
+    },
+    day: {
+      type: Number
     },
     onPermalink: {
       type: Function,

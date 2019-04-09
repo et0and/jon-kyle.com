@@ -2,8 +2,9 @@
   <div class="container">
     <div class="content">
       <ContentWalk
-        v-for="entry in entries"
+        v-for="(entry, i) in entries"
         :id="'entry-' + entry.name"
+        :day="i + 1"
         :key="entry.name"
         :entry="entry"
         :onPermalink="focus"
@@ -13,7 +14,7 @@
       <div class="map">
         <div class="map-header">
           <h2>{{page.title}}</h2>
-          <div v-if="page.live !== false">(Live)</div>
+          <div v-if="page.live !== false">(Live-ish)</div>
         </div>
         <l-map
           ref="map"
@@ -30,11 +31,11 @@
           <l-circle-marker :lat-lng="start" :fill="false" :radius="6" color="rgb(var(--bg))" />
           <l-circle-marker :lat-lng="finish" :fill="false" :radius="6" color="rgb(var(--bg))" />
           <l-circle-marker
-            v-for="entry in entries"
+            v-for="(entry, i) in entries"
             :lat-lng="[entry.lat, entry.lng]"
             :fill="false"
             :radius="6"
-            color="rgb(var(--fg))"
+            :color="i === entries.length - 1 ? 'red' : 'rgb(var(--fg))'"
             @click="focus(entry)"
            />
         </l-map> 
