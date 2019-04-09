@@ -1,8 +1,8 @@
 <template>
   <div class="content-entry copy">
     <section class="title">
-      <router-link :to="entry.url"><time :datetime="entry.date">{{entry.dateFormatted}}</time></router-link>
-      <span v-if="entry.title"> — {{entry.title}}</span>
+      <time :datetime="entry.date" @click="onPermalink(entry)">{{entry.dateFormatted}}</time>
+      <div class="mono" v-if="entry.miles">{{entry.miles}}mi</div>
     </section>
     <ol v-if="!truncate && index">
       <li v-for="text in index" v-html="text"></li>
@@ -74,7 +74,7 @@ const md = markdownIt({
   .use(footnote)
 
 export default {
-  name: 'ContentEntry',
+  name: 'ContentWalk',
   components: { PlaceholderText },
   props: {
     entry: {
@@ -85,6 +85,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    onPermalink: {
+      type: Function,
+      default: () => { }
+    }
   },
   data() {
     return {
@@ -123,7 +127,7 @@ export default {
       // content
       if (content) {
         let output = md
-          .render(content, { url: this.entry.url })
+          .render(content, { url: '/projects/pct' })
           .replace(/\[(.*?)\]/g, '($1)')
           .replace(/(\(\^.*?\))/g, '')
           .replace(/href="#(.*?)/g, `href="#${name}-$1`)
@@ -223,16 +227,27 @@ export default {
 
 <style scoped>
 .content-entry {
-  padding: 1rem;
+
 }
 
 .title {
+  display: flex;
+  justify-content: space-between;
   text-indent: -1rem;
   padding-left: 1rem;
+}
+
+.title time {
+  cursor: pointer;
+  text-decoration: underline;
 }
 
 .continue-container {
   grid-column: 1 / -1;
   margin-top: 1rem;
+}
+
+.content-entry >>> .copy figure {
+  grid-column: 1 / 13;
 }
 </style>

@@ -74,7 +74,7 @@ export default {
 header {
   display: grid;
   grid-gap: 1rem;
-  grid-template-columns: 1fr 1fr 2fr;
+  grid-template-columns: repeat(12, 1fr);
   padding: 1rem 1rem 4rem 1rem;
   margin-top: -0.3rem;
 }
@@ -85,6 +85,10 @@ a:hover { text-decoration: underline }
 header div:not(.title) a.router-link-exact-active {
   text-decoration: line-through;
 }
+
+header > div:nth-child(1) { grid-column: 1 / 4 }
+header > div:nth-child(2) { grid-column: 4 / 6 }
+header > div:nth-child(3) { grid-column: 7 / 12 }
 
 .toggle-light {
   background: none;

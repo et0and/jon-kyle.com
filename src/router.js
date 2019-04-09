@@ -48,6 +48,11 @@ export default new Router({
       path: '/about',
       name: 'about',
       component: About,
+    },
+    {
+      path: '/pct',
+      name: 'pct',
+      component: () => import(/* webpackChunkName: "group-pct" */ './views/PCT.vue')
     }
   ],
 })

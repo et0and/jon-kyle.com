@@ -17,6 +17,7 @@
     "gray-matter": "^4.0.2",
     "hooper": "^0.1.1",
     "instagram-web-api": "^2.0.0",
+    "leaflet": "^1.4.0",
     "markdown-it": "^8.4.2",
     "markdown-it-footnote": "^3.0.1",
     "markdown-it-html5-embed": "^1.0.0",
@@ -31,6 +32,7 @@
     "vue": "^2.5.22",
     "vue-meta": "^1.5.8",
     "vue-router": "^3.0.1",
+    "vue2-leaflet": "^2.0.3",
     "vuejs-paginate": "^2.1.0",
     "vuex": "^3.0.1",
     "xhr": "^2.5.0"
