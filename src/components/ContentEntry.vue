@@ -1,8 +1,11 @@
 <template>
   <div class="content-entry copy">
-    <section class="title">
-      <router-link :to="entry.url"><time :datetime="entry.date">{{entry.dateFormatted}}</time></router-link>
-      <span v-if="entry.title"> — {{entry.title}}</span>
+    <section class="content-head">
+      <div class="content-title">
+        <router-link :to="entry.url"><time :datetime="entry.date">{{entry.dateFormatted}}</time></router-link>
+        <span v-if="entry.title"> — {{entry.title}}</span>
+      </div>
+      <div v-if="entry.miles" class="mono">{{entry.miles}}mi</div>
     </section>
     <ol v-if="!truncate && index">
       <li v-for="text in index" v-html="text"></li>
@@ -116,6 +119,9 @@ export default {
     },
     copy() {
       let { excerpt, content, name, url } = this.entry
+      const mdParentUrl = this.entry._file === true
+        ? url.substring(0, url.lastIndexOf('/'))
+        : url
 
       // excerpt
       if ((this.truncate && excerpt) || !this.entry._loaded) content = excerpt
@@ -123,7 +129,7 @@ export default {
       // content
       if (content) {
         let output = md
-          .render(content, { url: this.entry.url })
+          .render(content, { url: mdParentUrl })
           .replace(/\[(.*?)\]/g, '($1)')
           .replace(/(\(\^.*?\))/g, '')
           .replace(/href="#(.*?)/g, `href="#${name}-$1`)
@@ -226,7 +232,12 @@ export default {
   padding: 1rem;
 }
 
-.title {
+.content-head {
+  display: flex;
+  justify-content: space-between;
+}
+
+.content-title {
   text-indent: -1rem;
   padding-left: 1rem;
 }

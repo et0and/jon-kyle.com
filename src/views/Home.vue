@@ -10,6 +10,9 @@ import FeedEntries from '@/components/FeedEntries'
 export default {
   name: 'Home',
   components: { FeedEntries, LoadingIndicator },
+  mounted () {
+    this.$store.dispatch('fetchPage', '/entries')
+  },
   computed: {
     entries() {
       const entries = this.$store.state.content['/entries']

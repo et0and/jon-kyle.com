@@ -11,20 +11,19 @@ export default {
   name: 'PCT',
   components: { FeedWalk, LoadingIndicator },
   mounted () {
-    this.$store.dispatch('fetchPage', '/projects/pct')
+    this.$store.dispatch('fetchPage', '/entries/2019-04-19-pct')
   },
   computed: {
     page () {
-      return this.$store.state.content['/projects/pct']
+      return this.$store.state.content['/entries/2019-04-19-pct']
     },
     entries () {
-      const page = this.$store.state.content['/projects/pct']
+      const page = this.$store.state.content['/entries/2019-04-19-pct']
       if (!page) return
       return page.pages
         .map(url => this.$store.state.content[url])
         .filter(page => page)
         .filter(page => page.visible !== false)
-        .sort((a, b) => (b.date.replace(/-/g, '') - a.date.replace(/-/g, '')))
     }
   }
 }

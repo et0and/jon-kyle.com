@@ -42,6 +42,7 @@ export default {
       if (!entries) return false
       return entries
         .map(key => this.$store.state.content[key])
+        .filter(page => typeof page === 'object')
         .filter(page => page.visible !== false)
     },
   },

@@ -1,12 +1,13 @@
 <template>
   <div class="container">
-    <div class="content">
+    <div class="walk-content">
       <ContentWalk
-        v-for="(entry, i) in entries"
+        v-for="entry in entriesSorted"
         :id="'entry-' + entry.name"
-        :day="i + 1"
+        :truncate="true"
         :key="entry.name"
         :entry="entry"
+        :color="entry.day === entries.length ? 'red' : 'rgb(var(--fg))'"
         :onPermalink="focus"
       />
     </div>
@@ -14,7 +15,8 @@
       <div class="map">
         <div class="map-header">
           <h2>{{page.title}}</h2>
-          <div v-if="page.live !== false">(Live-ish)</div>
+          <div class="sort" @click="sortDesc = !sortDesc">Sort ↑↓</div>
+          <div v-if="page.live === false">(Live-ish)</div>
         </div>
         <l-map
           ref="map"
@@ -31,11 +33,11 @@
           <l-circle-marker :lat-lng="start" :fill="false" :radius="6" color="rgb(var(--bg))" />
           <l-circle-marker :lat-lng="finish" :fill="false" :radius="6" color="rgb(var(--bg))" />
           <l-circle-marker
-            v-for="(entry, i) in entries"
+            v-for="entry in entriesSorted"
             :lat-lng="[entry.lat, entry.lng]"
             :fill="false"
             :radius="6"
-            :color="i === entries.length - 1 ? 'red' : 'rgb(var(--fg))'"
+            :color="entry.day === entries.length ? 'red' : 'rgb(var(--fg))'"
             @click="focus(entry)"
            />
         </l-map> 
@@ -74,6 +76,7 @@ export default {
   },
   data () {
     return {
+      sortDesc: true,
       bounds: L.latLngBounds([[32.60509, -116.46163], [49.06465, -120.78158]]),
       maxBounds: L.latLngBounds([[32.60509, -116.46163], [49.06465, -120.78158]]).pad(1),
       center: [0, 0],
@@ -92,6 +95,18 @@ export default {
       this.$refs.map.mapObject.scrollWheelZoom.disable()
     })
   },
+  computed: {
+    entriesSorted () {
+      return this.entries
+        .sort((b, a) => (b.date.replace(/-/g, '') - a.date.replace(/-/g, '')))
+        .map((entry, i) => Object.assign(entry, { day: i + 1 }))
+        .sort((a, b) => {
+          const next = b.date.replace(/-/g, '')  
+          const prev = a.date.replace(/-/g, '')
+          return this.sortDesc ? next - prev : prev - next
+        })
+    }
+  },
   methods: {
     zoomUpdate (zoom) {
       this.currentZoom = zoom;
@@ -103,7 +118,7 @@ export default {
       if (event.lat && event.lng) {
         const latlng = new L.LatLng(event.lat, event.lng)
         const el = document.querySelector('#entry-' + event.name)
-        this.$refs.map.mapObject.setView(latlng, 13)
+        this.$refs.map.mapObject.setView(latlng, 10)
         window.scrollTo(0, el.offsetTop)
       }
     }
@@ -120,8 +135,9 @@ export default {
   flex: 1;
 }
 
-.container .content {
+.walk-content {
   grid-column: span 6;
+  padding-bottom: 1rem;
 }
 
 .map-container {
@@ -134,6 +150,14 @@ export default {
   display: flex;
   justify-content: space-between;
   padding: 0 0 1rem;
+}
+
+.container .sort {
+  cursor: pointer;
+}
+
+.container .sort:hover {
+  text-decoration: underline;
 }
 
 .map {
@@ -170,20 +194,27 @@ export default {
 }
 
 .container >>> .copy {
-  --col: 1 / 13;
+  --col: 1 / 12;
 }
 
-.container .content > div {
+.container .walk-content > div {
   padding-top: 1rem;
 }
 
-.container .content > div:not(:first-child) {
+.container .walk-content > div:not(:first-child) {
   margin-top: 4rem;
 }
 
-.container >>> .leaflet-touch .leaflet-control-layers,
-.container >>> .leaflet-touch .leaflet-bar {
-  border: 0;
+.container >>> .vue2leaflet-map {
+  height: auto;
+  flex: 1;
+}
+
+.container >>> .leaflet-control-layers,
+.container >>> .leaflet-bar {
+  border: 0 !important;
+  box-shadow: none !important;
+  -webkit-box-shadow: none !important;
 }
 
 .container >>> .leaflet-top .leaflet-control {
@@ -196,17 +227,29 @@ export default {
   left: auto;
 }
 
+.container >>> .leaflet-interactive[stroke="rgb(var(--bg))"] {
+  fill: rgb(var(--bg));
+}
+
+.container >>> .leaflet-interactive[stroke="rgb(var(--fg))"] {
+  fill: rgb(var(--fg));
+}
+
+.container >>> .leaflet-interactive[stroke="red"] {
+  fill: red;
+}
+
 @media (max-width: 800px) {
-  .container .content, .map-container {
+  .walk-content, .map-container {
     grid-column: span 13;
   }
 
-  .container  .map-container { grid-row: 1 }
-  .container .content { grid-row: 2 }
+  .map-container { grid-row: 1 }
+  .walk-content { grid-row: 2 }
 
   .map { height: 50vh }
 
-  .container .content > div {
+  .walk-content > div {
     margin-top: 4rem;
   }
 }

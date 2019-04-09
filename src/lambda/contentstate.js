@@ -134,7 +134,7 @@ async function fetchFile (url = '/readme.md', ref = 'master') {
   // return cached if valid
   const name = path.basename(url)
   const _url = path.join(path.dirname(url), path.basename(name, path.extname(name)))
-  const page = { url: _url }
+  const page = { url: _url, _file: true }
   const src = formatRequestUrl(url, ref)
 
   if (isPageCached(_url, ref)) return state[ref][_url]

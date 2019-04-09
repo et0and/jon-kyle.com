@@ -2,8 +2,9 @@
   <div class="content-entry copy">
     <section class="title">
       <div>
-        <time :datetime="entry.date" @click="onPermalink(entry)">{{entry.dateFormatted}}</time>
-        <span v-if="day">, Day {{day}}</span>
+        <span @click="onPermalink(entry)" class="pin" :style="{ color }">●</span>
+        <router-link :to="entry.url"><time :datetime="entry.date">{{dateFormatted}}</time></router-link>
+        <span v-if="entry.title"> — {{entry.title}}</span>
       </div>
       <div class="mono" v-if="entry.miles">{{entry.miles}}mi</div>
     </section>
@@ -88,13 +89,11 @@ export default {
       type: Boolean,
       default: false,
     },
-    day: {
-      type: Number
-    },
     onPermalink: {
       type: Function,
       default: () => { }
-    }
+    },
+    color: String
   },
   data() {
     return {
@@ -119,10 +118,12 @@ export default {
     'entry.content': 'contentUpdated',
   },
   computed: {
+    dateFormatted () {
+      return this.entry.dateFormatted.split(',')[0]
+    },
     index() {
       if (!this.entry.index) return
-      return this.entry.index
-        .map(text => mdMicro.render(text))
+      return this.entry.index.map(text => mdMicro.render(text))
     },
     copy() {
       let { excerpt, content, name, url } = this.entry
@@ -133,7 +134,7 @@ export default {
       // content
       if (content) {
         let output = md
-          .render(content, { url: '/projects/pct' })
+          .render(content, { url: '/entries/2019-04-19-pct' })
           .replace(/\[(.*?)\]/g, '($1)')
           .replace(/(\(\^.*?\))/g, '')
           .replace(/href="#(.*?)/g, `href="#${name}-$1`)
@@ -236,14 +237,22 @@ export default {
 
 }
 
-.title {
-  display: flex;
-  justify-content: space-between;
-  text-indent: -1rem;
-  padding-left: 1rem;
+.pin {
+  cursor: pointer;
+  position: relative;
+  display: inline-block;
+  padding: 0.5rem;
+  margin: -0.5rem 0 -0.5rem -0.5rem;
+  transform: scale(1.65) translateY(-0.1rem);
 }
 
-.title time {
+.content-entry .title {
+  display: flex;
+  justify-content: space-between;
+  grid-column: 1 / 13;
+}
+
+.content-entry .title time {
   cursor: pointer;
   text-decoration: underline;
 }

@@ -40,19 +40,25 @@ export default new Router({
       component: Search,
     },
     {
-      path: '/entries/:entry',
-      name: 'entry',
-      component: Entry,
-    },
-    {
       path: '/about',
       name: 'about',
       component: About,
     },
     {
-      path: '/pct',
+      path: '/entries/2019-04-19-pct',
       name: 'pct',
+      alias: '/pct',
       component: () => import(/* webpackChunkName: "group-pct" */ './views/PCT.vue')
+    },
+    {
+      path: '/entries/:entry',
+      name: 'entry',
+      component: Entry
+    },
+    {
+      path: '/entries/:parententry/:entry',
+      name: 'subentry',
+      component: Entry
     }
   ],
 })

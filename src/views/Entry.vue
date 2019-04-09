@@ -35,20 +35,38 @@ export default {
   components: {
     ContentEntry,
   },
+  mounted () {
+    const parentUrl = this.$route.path.substring(0, this.$route.path.lastIndexOf('/'))
+    this.$store.dispatch('fetchPage', parentUrl)
+  },
   computed: {
-    entries() {
-      return this.$store.state.content['/entries']
+    parentUrl () {
+      if (!this.page) return
+      return this.page.url.substring(0, this.page.url.lastIndexOf('/'))
+    },
+    parent() {
+      const parent = this.$store.state.content[this.parentUrl]
+      return parent
+    },
+    pages () {
+      if (!this.page || !this.parent) return [ ]
+      const output = this.parent.pages
+        .map(page => this.$store.state.content[page])
+        .filter(page => page.visible !== false)
+        .sort((b, a) => (b.date.replace(/-/g, '') - a.date.replace(/-/g, '')))
+        .map(page => page.url)
+      return output
     },
     prev() {
-      if (!this.entries || !this.page) return
-      const index = this.entries.pages.indexOf(this.page.url)
-      return this.$store.state.content[this.entries.pages[index - 1]]
+      if (!this.page) return
+      const index = this.pages.indexOf(this.page.url)
+      return this.$store.state.content[this.pages[index - 1]]
     },
     next() {
-      if (!this.entries || !this.page) return
-      const index = this.entries.pages.indexOf(this.page.url)
-      return this.$store.state.content[this.entries.pages[index + 1]]
-    },
+      if (!this.page) return
+      const index = this.pages.indexOf(this.page.url)
+      return this.$store.state.content[this.pages[index + 1]]
+    }
   }
 }
 </script>

@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import * as matter from 'gray-matter'
 import * as lib from './lib'
+import xtend from 'xtend'
 
 Vue.use(Vuex)
 
@@ -25,22 +26,23 @@ const store = new Vuex.Store({
   },
   mutations: {
     setApi (state, payload = { }) {
-      state.api = Object.assign({ }, state.api, payload)
+      state.api = xtend(state.api, payload)
     },
     setUi (state, payload = { }) {
-      state.ui = Object.assign({ }, state.ui, payload)
+      state.ui = xtend(state.ui, payload)
     },
     setInstagram (state, payload = [ ]) {
       state.instagram = payload
     },
     setOptions (state, payload = { }) {
-      state.options = Object.assign({ }, state.options, payload)
+      state.options = xtend(state.options, payload)
       window.localStorage.setItem('options', JSON.stringify(state.options))
     },
     setPage (state, payload = { }) {
       Object.values(payload).forEach(page => {
         const current = state.content[page.url] || { }
-        const data = Object.assign({ }, current, page, {
+        if (current._loaded) return 
+        const data = xtend(current, page, {
           _loaded: current._loaded || page._loaded
         })
         Vue.set(state.content, page.url, data)
