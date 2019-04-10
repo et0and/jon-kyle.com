@@ -231,6 +231,7 @@ export default {
   fill: rgb(var(--bg));
 }
 
+/*
 .container >>> .leaflet-interactive[stroke="rgb(var(--fg))"] {
   fill: rgb(var(--fg));
 }
@@ -238,6 +239,7 @@ export default {
 .container >>> .leaflet-interactive[stroke="red"] {
   fill: red;
 }
+*/
 
 @media (max-width: 800px) {
   .walk-content, .map-container {
