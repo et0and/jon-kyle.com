@@ -2,6 +2,14 @@
   <div>
     <ContentEntry :entry="page" v-if="page" :key="page.name" />
     <div class="footer">
+      <div v-if="parent && parent.title">
+        <router-link v-if="parent" :to="parent.url">
+          <div class="heading">Parent</div>
+          <div class="title">
+            <span class="underline" v-if="parent.title">{{parent.title}}</span>
+          </div>
+         </router-link>
+      </div>
       <div>
         <router-link v-if="next" :to="next.url">
           <div class="heading">Newer</div>

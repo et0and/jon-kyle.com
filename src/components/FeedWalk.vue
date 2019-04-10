@@ -1,16 +1,5 @@
 <template>
   <div class="container">
-    <div class="walk-content">
-      <ContentWalk
-        v-for="entry in entriesSorted"
-        :id="'entry-' + entry.name"
-        :truncate="true"
-        :key="entry.name"
-        :entry="entry"
-        :color="entry.day === entries.length ? 'red' : 'rgb(var(--fg))'"
-        :onPermalink="focus"
-      />
-    </div>
     <div class="map-container">
       <div class="map">
         <div class="map-header">
@@ -38,7 +27,7 @@
             :fill="false"
             :radius="6"
             :color="entry.day === entries.length ? 'red' : 'rgb(var(--fg))'"
-            @click="focus(entry)"
+            @click="focus(entry, 'entry')"
            />
         </l-map> 
         <div class="meta">
@@ -52,6 +41,17 @@
           </ul>
         </div>
       </div>
+    </div>
+    <div class="walk-content">
+      <ContentWalk
+        v-for="entry in entriesSorted"
+        :id="'entry-' + entry.name"
+        :truncate="true"
+        :key="entry.name"
+        :entry="entry"
+        :color="entry.day === entries.length ? 'red' : 'rgb(var(--fg))'"
+        :onPermalink="focus"
+      />
     </div>
   </div>
 </template>
@@ -114,12 +114,19 @@ export default {
     centerUpdate (center) {
       this.currentCenter = center;
     },
-    focus (event) {
+    focus (event, target) {
       if (event.lat && event.lng) {
         const latlng = new L.LatLng(event.lat, event.lng)
-        const el = document.querySelector('#entry-' + event.name)
+        if (target === 'map') {
+          if (window.innerWidth < 800) {
+            const el = document.querySelector('.map-container')
+            window.scrollTo(0, el.offsetTop)
+          }
+        } else {
+          const el = document.querySelector('#entry-' + event.name)
+          window.scrollTo(0, el.offsetTop)
+        }
         this.$refs.map.mapObject.setView(latlng, 10)
-        window.scrollTo(0, el.offsetTop)
       }
     }
   }
@@ -231,15 +238,13 @@ export default {
   fill: rgb(var(--bg));
 }
 
-/*
 .container >>> .leaflet-interactive[stroke="rgb(var(--fg))"] {
-  fill: rgb(var(--fg));
+  fill: rgba(var(--fg), 0);
 }
 
 .container >>> .leaflet-interactive[stroke="red"] {
-  fill: red;
+  fill: rgba(0, 0, 0, 0);
 }
-*/
 
 @media (max-width: 800px) {
   .walk-content, .map-container {

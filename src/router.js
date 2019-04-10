@@ -47,7 +47,6 @@ export default new Router({
     {
       path: '/entries/2019-04-19-pct',
       name: 'pct',
-      alias: '/pct',
       component: () => import(/* webpackChunkName: "group-pct" */ './views/PCT.vue')
     },
     {
@@ -59,6 +58,10 @@ export default new Router({
       path: '/entries/:parententry/:entry',
       name: 'subentry',
       component: Entry
+    },
+    {
+      path: '/pct',
+      redirect: '/entries/2019-04-19-pct'
     }
   ],
 })

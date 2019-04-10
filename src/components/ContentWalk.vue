@@ -2,7 +2,7 @@
   <div class="content-entry copy">
     <section class="title">
       <div>
-        <span @click="onPermalink(entry)" class="pin" :style="{ color }">●</span>
+        <span @click="onPermalink(entry, 'map')" class="pin" :style="{ color }">●</span>
         <router-link :to="entry.url"><time :datetime="entry.date">{{dateFormatted}}</time></router-link>
         <span v-if="entry.title"> — {{entry.title}}</span>
       </div>
