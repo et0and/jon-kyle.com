@@ -1,10 +1,5 @@
 <template>
-  <main>
-    <GlobalHeader />
-    <div class="content">
-      <router-view />
-    </div>
-  </main>
+  <router-view />
 </template>
 
 <script>
@@ -218,6 +213,7 @@ code {
 
 @media (max-width: 950px) {
   .copy { --col: 3 / 11 }
+  body .copy figure { grid-column: var(--col) }
 }
 
 @media (max-width: 750px) {
@@ -226,7 +222,6 @@ code {
 
 @media (max-width: 600px) {
   .copy { --col: 1 / -1; --wmx: 100%; }
-  .copy figure { grid-column: 1 / -1 !important; }
 }
 
 .copy h1,

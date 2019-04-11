@@ -1,27 +1,30 @@
 <template>
-  <div class="about" v-if="content">
-    <div class="social-container">
-      <div class="social">
-        <img :src="image" />
-        <div class="meta">
-          <div>{{page.location}}</div>
-          <div v-html="contact" />
-          <div v-html="social" />
+  <WrapperStandard>
+    <div class="about" v-if="content">
+      <div class="social-container">
+        <div class="social">
+          <img :src="image" />
+          <div class="meta">
+            <div>{{page.location}}</div>
+            <div v-html="contact" />
+            <div v-html="social" />
+          </div>
         </div>
       </div>
+      <Hooper v-if="slideshow" :settings="hooperSettings">
+        <slide>One</slide>
+        <slide>Two</slide>
+      </Hooper>
+      <div class="columns">
+        <section v-for="section in content" v-html="section"></section>
+      </div>
     </div>
-    <Hooper v-if="slideshow" :settings="hooperSettings">
-      <slide>One</slide>
-      <slide>Two</slide>
-    </Hooper>
-    <div class="columns">
-      <section v-for="section in content" v-html="section"></section>
-    </div>
-  </div>
-  <LoadingIndicator v-else />
+    <LoadingIndicator v-else />
+  </WrapperStandard>
 </template>
 
 <script>
+import WrapperStandard from '@/components/WrapperStandard'
 import LoadingIndicator from '@/components/LoadingIndicator'
 import { Hooper, Slide } from 'hooper'
 import 'hooper/dist/hooper.css'
@@ -33,7 +36,7 @@ const md = new markdownIt()
 export default {
   name: 'About',
   mixins: [mixin],
-  components: { LoadingIndicator, Hooper, Slide },
+  components: { WrapperStandard, LoadingIndicator, Hooper, Slide },
   metaInfo() {
     return { title: 'About' }
   },

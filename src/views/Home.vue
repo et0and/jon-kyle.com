@@ -1,15 +1,18 @@
 <template>
-  <FeedEntries v-if="entries" :entries="entries" />
-  <LoadingIndicator v-else />
+  <WrapperStandard>
+    <FeedEntries v-if="entries" :entries="entries" />
+    <LoadingIndicator v-else />
+  </WrapperStandard>
 </template>
 
 <script>
+import WrapperStandard from '@/components/WrapperStandard'
 import LoadingIndicator from '@/components/LoadingIndicator'
 import FeedEntries from '@/components/FeedEntries'
 
 export default {
   name: 'Home',
-  components: { FeedEntries, LoadingIndicator },
+  components: { FeedEntries, LoadingIndicator, WrapperStandard },
   mounted () {
     this.$store.dispatch('fetchPage', '/entries')
   },

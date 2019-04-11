@@ -1,23 +1,26 @@
 <template>
-  <div v-if="entries">
-    <div class="empty" v-if="!entries.length">
-      No results<br>
-      Try again maybe?<br><br>
-      🙃
+  <WrapperStandard>
+    <div v-if="entries">
+      <div class="empty" v-if="!entries.length">
+        No results<br>
+        Try again maybe?<br><br>
+        🙃
+      </div>
+      <FeedEntries v-else :entries="entries" />
     </div>
-    <FeedEntries v-else :entries="entries" />
-  </div>
-  <LoadingIndicator v-else />
+    <LoadingIndicator v-else />
+  </WrapperStandard>
 </template>
 
 <script>
+import WrapperStandard from '@/components/WrapperStandard'
 import LoadingIndicator from '@/components/LoadingIndicator'
 import FeedEntries from '@/components/FeedEntries.vue'
 import * as lib from '@/store/lib'
 
 export default {
   name: 'Search',
-  components: { FeedEntries, LoadingIndicator },
+  components: { WrapperStandard, FeedEntries, LoadingIndicator },
   watch: {
     '$route.query.query': function (query) {
       this.query = query

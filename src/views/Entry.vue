@@ -1,8 +1,8 @@
 <template>
-  <div>
+  <WrapperStandard>
     <ContentEntry :entry="page" v-if="page" :key="page.name" />
     <div class="footer">
-      <div v-if="parent && parent.title">
+      <div v-if="false">
         <router-link v-if="parent" :to="parent.url">
           <div class="heading">Parent</div>
           <div class="title">
@@ -11,7 +11,7 @@
          </router-link>
       </div>
       <div>
-        <router-link v-if="next" :to="next.url">
+        <router-link v-if="next && next.url" :to="next.url">
           <div class="heading">Newer</div>
           <div class="title">
             <span class="underline">{{next.dateFormatted}}</span>
@@ -20,7 +20,7 @@
          </router-link>
       </div>
       <div>
-        <router-link v-if="prev" :to="prev.url">
+        <router-link v-if="prev && prev.url" :to="prev.url">
           <div class="heading">Older</div>
           <div class="title">
             <span class="underline">{{prev.dateFormatted}}</span>
@@ -29,10 +29,11 @@
          </router-link>
       </div>
     </div>
-  </div>
+  </WrapperStandard>
 </template>
 
 <script>
+import WrapperStandard from '@/components/WrapperStandard'
 import ContentEntry from '@/components/ContentEntry'
 import FeedEntries from '@/components/FeedEntries'
 import { mixin } from '../store'
@@ -40,9 +41,7 @@ import { mixin } from '../store'
 export default {
   name: 'home',
   mixins: [mixin],
-  components: {
-    ContentEntry,
-  },
+  components: { WrapperStandard, ContentEntry },
   mounted () {
     const parentUrl = this.$route.path.substring(0, this.$route.path.lastIndexOf('/'))
     this.$store.dispatch('fetchPage', parentUrl)

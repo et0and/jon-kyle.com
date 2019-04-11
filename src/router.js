@@ -45,11 +45,6 @@ export default new Router({
       component: About,
     },
     {
-      path: '/entries/2019-04-19-pct',
-      name: 'pct',
-      component: () => import(/* webpackChunkName: "group-pct" */ './views/PCT.vue')
-    },
-    {
       path: '/entries/:entry',
       name: 'entry',
       component: Entry
@@ -61,7 +56,8 @@ export default new Router({
     },
     {
       path: '/pct',
-      redirect: '/entries/2019-04-19-pct'
+      name: 'pct',
+      component: () => import(/* webpackChunkName: "group-pct" */ './views/PCT.vue')
     }
   ],
 })

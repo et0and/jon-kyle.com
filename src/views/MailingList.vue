@@ -1,1 +1,0 @@
-MailingList.vue

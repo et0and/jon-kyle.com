@@ -139,16 +139,16 @@ export default {
           .replace(/\n<p>\s*<\/p>\n/g, '')
           .replace(/<p>\s*(<figure class="video">([\s\S]*|$)<\/figure>)\s*<\/p>/g, '$1')
           .replace(
-            /<figure><img alt="c:([\S]*) r:([\S]*)" data-src="([\S|.]*)"/g,
-            '<figure class="ratio" style="grid-column: $1"><div style="padding-bottom: $2%;"></div><img data-src="$3" ',
+            /<figure>(.*?)<img alt="c:([\S]*) r:([\S]*)" data-src="([\S|.]*)"/g,
+            '<figure class="ratio" style="grid-column: $2"><div style="padding-bottom: $3%;"></div>$1<img data-src="$4" ',
           )
           .replace(
-            /<figure><img data-src="([\S|.]*)" alt="c:([\S]*)"/g,
-            '<figure style="grid-column: $2;"><img data-src="$1" ',
+            /<figure>(.*?)<img data-src="([\S|.]*)" alt="c:([\S]*)"/g,
+            '<figure style="grid-column: $3;">$1<img data-src="$2" ',
           )
           .replace(
-            /<figure><img alt="r:([\S]*)" data-src="([\S|.]*)"./g,
-            '<figure class="ratio"><div style="padding-bottom: $1%;"></div><img data-src="$2">',
+            /<figure>(.*?)<img alt="r:([\S]*)" data-src="([\S|.]*)"./g,
+            '<figure class="ratio"><div style="padding-bottom: $2%;"></div>$1<img data-src="$3">',
           )
           .replace(/(?=.*?<figure class=")(?=.*?png).*?(class=")/gm, '<figure class="transparent ')
 
@@ -168,13 +168,15 @@ export default {
         const els = [...this.$refs.copy.querySelectorAll('[data-src]')]
         els.forEach((el) => {
           const watcher = scrollMonitor.create(el, 200)
-          mediumZoom(el, { background: '#000' })
+          this.watchers.push(watcher)
           watcher.on('enterViewport', () => {
             if (!el.getAttribute('src')) {
               el.setAttribute('src', el.getAttribute('data-src'))
             }
           })
-          this.watchers.push(watcher)
+          if (!el.parentNode.nodeName === 'A') {
+            mediumZoom(el, { background: '#000' })
+          }
         })
       }
     },

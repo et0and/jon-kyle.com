@@ -1,8 +1,14 @@
 <template>
   <div class="content-entry copy">
     <section class="title">
+      <div @click="onPermalink(entry, 'map')" class="pin">
+        <svg width="10px" height="10px" viewBox="0 0 10 10">
+          <g stroke-width="1" stroke="rgb(var(--fg))" :fill="active ? 'rgb(var(--fg))' : 'none'" fill-rule="evenodd" vector-effect="non-scaling-stroke">
+            <circle id="Oval" cx="5" cy="5" r="4.5" vector-effect="non-scaling-stroke"></circle>
+          </g>
+        </svg> 
+      </div>
       <div>
-        <span @click="onPermalink(entry, 'map')" class="pin" :style="{ color }">●</span>
         <router-link :to="entry.url"><time :datetime="entry.date">{{dateFormatted}}</time></router-link>
         <span v-if="entry.title"> — {{entry.title}}</span>
       </div>
@@ -93,7 +99,7 @@ export default {
       type: Function,
       default: () => { }
     },
-    color: String
+    active: Boolean
   },
   data() {
     return {
@@ -237,20 +243,26 @@ export default {
 
 }
 
-.pin {
-  cursor: pointer;
-  position: relative;
-  display: inline-block;
-  padding: 0.5rem;
-  margin: -0.5rem 0 -0.5rem -0.5rem;
-  transform: scale(1.65) translateY(-0.1rem);
-}
-
 .content-entry .title {
   display: flex;
   justify-content: space-between;
-  grid-column: 1 / 13;
+  grid-column: var(--col);
 }
+
+.pin {
+  cursor: pointer;
+  position: relative;
+  margin-right: 0.5rem;
+}
+
+.pin svg {
+  height: 1rem;
+  width: 1rem;
+  display: block;
+  transform: translateY(0.25rem);
+}
+
+.content-entry .title :nth-child(2) { flex: 1 }
 
 .content-entry .title time {
   cursor: pointer;
@@ -260,9 +272,5 @@ export default {
 .continue-container {
   grid-column: 1 / -1;
   margin-top: 1rem;
-}
-
-.content-entry >>> .copy figure {
-  grid-column: 1 / 13;
 }
 </style>
