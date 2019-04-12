@@ -98,7 +98,12 @@ const store = new Vuex.Store({
 const mixin = {
   computed: {
     page() {
-      return this.$store.state.content[this.$route.path]
+      const redirect = {
+        '/pct': '/entries/2019-04-19-pct'
+      }
+      return redirect[this.$route.path]
+        ? this.$store.state.content[redirect[this.$route.path]]
+        : this.$store.state.content[this.$route.path]
     },
   },
 }
