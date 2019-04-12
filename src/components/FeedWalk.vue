@@ -5,7 +5,7 @@
       <div>
         <div class="map-title">
           <h2>{{page.title}}</h2>
-          <span class="mono">{{page.mile}}/{{page.miles}}mi</span> (Day <span class="mono">{{entries.length}}</span>)
+          <span class="mono">{{page.mile}}/{{page.total}}mi</span> (Day <span class="mono">{{entries.length}}</span>)
           <svg preserveAspectRatio="none" viewBox="0 0 10 10">
             <g stroke-width="1" stroke="rgb(var(--fg))" fill="none" fill-rule="evenodd" vector-effect="non-scaling-stroke">
               <circle id="Oval" cx="5" cy="5" r="4.5" vector-effect="non-scaling-stroke"></circle>
@@ -171,7 +171,6 @@ export default {
 }
 
 .walk-map {
-  position: relative;
   position: fixed;
   top: 0;
   left: 0;
@@ -281,7 +280,7 @@ export default {
   .walk-content >>> .copy { --col: 4 / 10 }
 }
 
-@media (max-width: 1400px) and (min-width: 800px) {
+@media (max-width: 1600px) and (min-width: 800px) {
   .walk-content >>> .copy figure { grid-column: 2 / 12 }
   .walk-content >>> .copy { --col: 3 / 11 }
 }
@@ -302,10 +301,11 @@ export default {
   }
 
   .walk-map {
-    position: relative;
+    position: relative;;
     height: 50vh;
     width: auto;
-    margin-bottom: 3rem
+    margin-bottom: 3rem;
+    z-index: 1;
   }
 }
 </style>

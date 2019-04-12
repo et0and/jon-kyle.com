@@ -350,6 +350,11 @@ code {
   outline: 0;
 }
 
+.medium-zoom-image--opened,
+.medium-zoom-overlay {
+  z-index: 9;
+}
+
 ::-webkit-input-placeholder { color: rgba(var(--fg), 0.25); opacity: 1 }
 ::-moz-placeholder { color: rgba(var(--fg), 0.25); opacity: 1 }
 :-ms-input-placeholder { color: rgba(var(--fg), 0.25); opacity: 1 }
