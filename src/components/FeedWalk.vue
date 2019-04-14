@@ -46,15 +46,20 @@
       </l-map> 
     </div>
     <div class="walk-content" v-if="entriesSorted && entriesSorted.length">
-      <ContentWalk
-        v-for="entry in entriesSorted"
-        :id="'entry-' + entry.name"
-        :truncate="true"
-        :key="entry.name"
-        :entry="entry"
-        :active="entry.day === entries.length"
-        :onPermalink="focus"
-      />
+      <div v-for="(entry, i) in entriesSorted">
+        <ContentWalk
+          :id="'entry-' + entry.name"
+          :truncate="true"
+          :key="entry.name"
+          :entry="entry"
+          :active="entry.day === entries.length"
+          :onPermalink="focus"
+        />
+        <div v-if="i === 0" :class="['note', { active: noteState === 'pitch' }]" @click="noteState = 'how'">
+          <div class="note-icon">{{note[noteState].icon}}</div>
+          <div class="note-text">{{note[noteState].text}}</div>
+        </div>
+      </div>
     </div>
     <div class="walk-no-content" v-else>
       There aren’t any entires yet, but check back soon
@@ -95,6 +100,11 @@ export default {
       urlLive: 'https://caltopo.com/tile/satday_v-99999/{z}/{x}/{y}.png',
       start: [32.60509, -116.46163],
       finish: [49.06465, -120.78158],
+      noteState: 'pitch',
+      note: {
+        pitch: { icon: '🍻', text: 'Amused? Bewildered? Buy me a drink or coffee when I’m in town and leave a note!' },
+        how: { icon: '👍', text: 'Oh thanks! You can do that using Venmo (jondashkyle) or Square ($jondashkyle)' }
+      },
       options: {
 
       }
@@ -122,6 +132,9 @@ export default {
           const prev = a.date.replace(/-/g, '')
           return this.sortDesc ? next - prev : prev - next
         })
+    },
+    entriesFeed () {
+      return this.entriesSorted
     },
     styleFunction () {
       return () => {
@@ -217,6 +230,27 @@ export default {
   width: calc(100% + 6rem);
 }
 
+.note {
+  display: flex;
+  border: 1px solid rgb(var(--fg));
+  padding: 1rem;
+  max-width: 25rem;
+  margin: 4rem auto 0;
+}
+
+.note.active {
+  cursor: pointer;
+}
+
+.note-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  line-height: 1;
+  font-size: 2rem;
+  margin-right: 1rem;
+}
+
 .walk-container .sort {
   cursor: pointer;
 }
@@ -225,9 +259,21 @@ export default {
   text-decoration: underline;
 }
 
-
 .walk-content >>> .leaflet-bottom.leaflet-right {
   display: none !important;
+}
+
+.walk-container >>> .leaflet-control-zoom-in,
+.walk-container >>> .leaflet-control-zoom-out {
+  font-family: var(--mono);
+  font-weight: normal;
+  font-size: 1rem;
+  color: rgb(var(--fg));
+  background: rgb(var(--bg));
+}
+
+.walk-container >>> .leaflet-control-zoom-out {
+  margin-top: 1px;
 }
 
 .walk-content > div {
