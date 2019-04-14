@@ -1,27 +1,22 @@
 <template>
-  <div v-if="entries">
-    <FeedWalk :page="page" :entries="entries" />
-  </div>
+  <FeedWalk :page="page" :entries="entries" v-if="page" />
   <LoadingIndicator v-else />
 </template>
 
 <script>
 import LoadingIndicator from '@/components/LoadingIndicator'
 import FeedWalk from '../components/FeedWalk'
-import { mixin } from '../store'
 
 export default {
   name: 'PCT',
   components: { FeedWalk, LoadingIndicator },
-  mixins: [ mixin ],
   mounted () {
     this.$store.dispatch('fetchPage', '/entries/2019-04-19-pct')
   },
   computed: {
     entries () {
-      const page = this.$store.state.content['/entries/2019-04-19-pct']
-      if (!page) return
-      return page.pages
+      if (!this.page) return
+      return this.page.pages
         .map(url => this.$store.state.content[url])
         .filter(page => page)
         .filter(page => page.visible !== false)

@@ -45,7 +45,7 @@
           />
       </l-map> 
     </div>
-    <div class="walk-content">
+    <div class="walk-content" v-if="entriesSorted && entriesSorted.length">
       <ContentWalk
         v-for="entry in entriesSorted"
         :id="'entry-' + entry.name"
@@ -55,6 +55,9 @@
         :active="entry.day === entries.length"
         :onPermalink="focus"
       />
+    </div>
+    <div class="walk-no-content" v-else>
+      There aren’t any entires yet, but check back soon
     </div>
   </div>
 </template>
@@ -162,12 +165,24 @@ export default {
 
 <style scoped>
 .walk-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
   margin-left: 50%;
   width: 50%;
 }
 
 .walk-content {
   padding: 0 1rem 4rem;
+}
+
+.walk-no-content {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 1rem 4rem;
+  flex: 1;
 }
 
 .walk-map {
