@@ -102,7 +102,7 @@ export default {
       finish: [49.06465, -120.78158],
       noteState: 'pitch',
       note: {
-        pitch: { icon: '🍻', text: 'Amused? Bewildered? Buy me a drink or coffee when I’m in town and leave a note!' },
+        pitch: { icon: '🍻', text: 'Amused? Bewildered? Buy me a drink or coffee for when I’m in town and leave a note!' },
         how: { icon: '👍', text: 'Oh thanks! You can do that using Venmo (jondashkyle) or Square ($jondashkyle)' }
       },
       options: {
@@ -152,7 +152,6 @@ export default {
     zoomUpdate (zoom) {
       this.currentZoom = zoom
       this.url = zoom < 10 ? this.urlLive : this.urlShade
-      console.log(zoom)
     },
     centerUpdate (center) {
       this.currentCenter = center
