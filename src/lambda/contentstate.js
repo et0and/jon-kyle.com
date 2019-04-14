@@ -186,6 +186,8 @@ function parsePageData (data, url) {
     .filter(file => (file.name.substring(0, 1) !== '.'))
     .reduce((res, cur, i, arr) => {
       const extname = path.extname(cur.name)
+      // hidden
+      if (cur.name.charAt(0) === '_') return res
       // directory
       if (!extname) {
         res.pages.push(path.join(url, cur.name))
