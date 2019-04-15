@@ -174,7 +174,7 @@ export default {
               el.setAttribute('src', el.getAttribute('data-src'))
             }
           })
-          if (!el.parentNode.nodeName === 'A') {
+          if (el.parentNode.nodeName !== 'A') {
             mediumZoom(el, { background: '#000' })
           }
         })
