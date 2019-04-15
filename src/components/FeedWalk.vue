@@ -102,7 +102,7 @@ export default {
       finish: [49.06465, -120.78158],
       noteState: 'pitch',
       note: {
-        pitch: { icon: '🍻', text: 'Amused? Bewildered? Buy me a drink or coffee for when I’m in town and leave a note!' },
+        pitch: { icon: '🍻', text: 'Amused? Confused? Buy me a drink or coffee for when I’m in town and leave a note!' },
         how: { icon: '👍', text: 'Oh thanks! You can do that using Venmo (jondashkyle) or Square ($jondashkyle)' }
       },
       options: {
@@ -232,8 +232,8 @@ export default {
 .note {
   display: flex;
   border: 1px solid rgb(var(--fg));
-  padding: 1rem;
-  max-width: 25rem;
+  padding: 1rem 3rem 1rem 1rem;
+  max-width: 27rem;
   margin: 4rem auto 0;
 }
 
@@ -248,6 +248,7 @@ export default {
   line-height: 1;
   font-size: 2rem;
   margin-right: 1rem;
+  height: 3rem;
 }
 
 .walk-container .sort {
@@ -273,6 +274,10 @@ export default {
 
 .walk-container >>> .leaflet-control-zoom-out {
   margin-top: 1px;
+}
+
+.walk-container >>> .leaflet-control-zoom-out.leaflet-disabled {
+  color: rgb(var(--fg), 0.25);
 }
 
 .walk-content > div {
