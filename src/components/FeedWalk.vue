@@ -47,7 +47,7 @@
       </l-map> 
     </div>
     <div class="walk-content" v-if="entriesSorted && entriesSorted.length">
-      <div v-for="(entry, i) in entriesSorted">
+      <div v-for="(entry, i) in entriesSorted" :key="'entry-' + i">
         <ContentWalk
           :id="'entry-' + entry.name"
           :truncate="true"
