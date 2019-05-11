@@ -12,7 +12,7 @@
         <div class="heading">
           <a href="https://instagram.com/jondashkyle" target="_blank">@jondashkyle</a> on Instagram
         </div>
-        <div class="gram" v-for="gram in instagram">
+        <div class="gram" v-for="(gram, i) in instagram" :key="'insta-' + i">
           <a :href="'https://instagram.com/p/' + gram.shortcode" target="_blank"><img :src="gram.url"/></a>
         </div>
       </div>

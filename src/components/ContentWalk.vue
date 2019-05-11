@@ -15,7 +15,7 @@
       <div class="mono" v-if="entry.miles">{{entry.miles}}mi</div>
     </section>
     <ol v-if="!truncate && index">
-      <li v-for="text in index" v-html="text"></li>
+      <li v-for="(text, i) in index" v-html="text" :key="'text' + i"></li>
     </ol>
     <div v-if="truncate || entry.excerpt || entry._loaded" class="copy" ref="copy" v-html="copy" />
     <div class="continue-container" v-if="truncate && entry.excerpt">
@@ -239,10 +239,6 @@ export default {
 </script>
 
 <style scoped>
-.content-entry {
-
-}
-
 .content-entry .title {
   display: flex;
   justify-content: space-between;

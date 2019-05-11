@@ -37,7 +37,7 @@
         <l-circle-marker v-if="false" :lat-lng="finish" :fill="false" :radius="6" color="rgb(var(--bg))" />
         <l-circle-marker
           v-for="entry in entriesMap"
-          v-if="entry.lat"
+          :key="entry.lat"
           :lat-lng="[entry.lat, entry.lng]"
           :fill="false"
           :radius="6"
@@ -135,7 +135,7 @@ export default {
         })
     },
     entriesMap () {
-      return this.entriesSorted.slice().reverse()
+      return this.entriesSorted.slice().reverse().filter(entry => entry.lat)
     },
     entriesFeed () {
       return this.entriesSorted

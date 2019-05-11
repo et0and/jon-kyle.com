@@ -8,7 +8,7 @@
       <div v-if="entry.miles" class="mono">{{entry.miles}}mi</div>
     </section>
     <ol v-if="!truncate && index">
-      <li v-for="text in index" v-html="text"></li>
+      <li v-for="(text, i) in index" v-html="text" :key="'entry-' + i"></li>
     </ol>
     <div v-if="truncate || entry.excerpt || entry._loaded" class="copy" ref="copy" v-html="copy" />
     <div class="continue-container" v-if="truncate && entry.excerpt">

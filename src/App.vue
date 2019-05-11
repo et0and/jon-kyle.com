@@ -312,7 +312,7 @@ code {
 .copy figure.ratio img { height: 0; position: absolute; top: 0; left: 0; height: 100%; width: 100%; }
 
 .copy sup { vertical-align: top }
-.copy .footnote-ref a { font-family: var(--mono); text-decoration: none; margin-top: }
+.copy .footnote-ref a { font-family: var(--mono); text-decoration: none; }
 .copy a.footnote-backref { text-decoration: none; color: rgba(var(--fg), 0.2) }
 .copy a.footnote-backref:hover { color: rgba(var(--fg), 1) }
 .copy .footnotes blockquote { margin-left: -1rem; text-indent: 0; padding-left: 1rem; }
