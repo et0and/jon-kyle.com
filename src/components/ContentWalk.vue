@@ -1,9 +1,9 @@
 <template>
   <div class="content-entry copy">
     <section class="title">
-      <div @click="onPermalink(entry, 'map')" class="pin">
+      <div @click="onPermalink(entry, 'map')" class="pin" v-if="entry.lat">
         <svg width="10px" height="10px" viewBox="0 0 10 10">
-          <g stroke-width="1" stroke="rgb(var(--fg))" :fill="active ? 'rgb(var(--fg))' : 'none'" fill-rule="evenodd" vector-effect="non-scaling-stroke">
+          <g stroke-width="1" :stroke="active ? '#f00' : 'rgb(var(--fg))'" :fill="active ? '#f00' : 'rgb(var(--fg))'" fill-rule="evenodd" vector-effect="non-scaling-stroke">
             <circle id="Oval" cx="5" cy="5" r="4.5" vector-effect="non-scaling-stroke"></circle>
           </g>
         </svg> 

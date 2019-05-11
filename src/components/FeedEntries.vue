@@ -71,7 +71,8 @@ export default {
       return this.$store.state.instagram.slice(0, 6)
     },
     isInstagramVisible () {
-      return this.$route.path === '/' && this.page - 1 === 0
+      return false
+      // return this.$route.path === '/' && this.page - 1 === 0
     }
   },
   methods: {

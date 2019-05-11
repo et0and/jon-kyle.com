@@ -36,13 +36,14 @@
         <l-circle-marker v-if="false" :lat-lng="start" :fill="false" :radius="6" color="rgb(var(--bg))" />
         <l-circle-marker v-if="false" :lat-lng="finish" :fill="false" :radius="6" color="rgb(var(--bg))" />
         <l-circle-marker
-          v-for="entry in entriesSorted"
+          v-for="entry in entriesMap"
+          v-if="entry.lat"
           :lat-lng="[entry.lat, entry.lng]"
           :fill="false"
           :radius="6"
           :color="entry.day === entries.length ? 'rgba(var(--fg), 1)' : 'rgb(var(--fg))'"
           @click="focus(entry, 'entry')"
-          />
+        />
       </l-map> 
     </div>
     <div class="walk-content" v-if="entriesSorted && entriesSorted.length">
@@ -133,6 +134,9 @@ export default {
           return this.sortDesc ? next - prev : prev - next
         })
     },
+    entriesMap () {
+      return this.entriesSorted.slice().reverse()
+    },
     entriesFeed () {
       return this.entriesSorted
     },
@@ -166,7 +170,7 @@ export default {
           }
         } else {
           const el = document.querySelector('#entry-' + event.name)
-          window.scrollTo(0, el.offsetTop)
+          if (el && el.parentNode) window.scrollTo(0, el.parentNode.offsetTop)
         }
         this.$refs.map.mapObject.setView(latlng, 10)
       }
@@ -306,18 +310,21 @@ export default {
 }
 
 .walk-container >>> .leaflet-interactive[stroke-width="3"][stroke="rgba(var(--fg), 1)"] {
-  fill: rgb(var(--fg));
+  fill: #f00;
+  stroke: rgba(var(--bg), 1);
   stroke-width: 1px;
 }
 
 
 .walk-container >>> .leaflet-interactive[stroke-width="3"][stroke="rgb(var(--bg))"] {
-  fill: rgba(var(--bg), 1);
+  fill: rgba(var(--fg), 1);
+  stroke: rgba(var(--fg), 1);
   stroke-width: 1px;
 }
 
 .walk-container >>> .leaflet-interactive[stroke="rgb(var(--fg))"] {
-  fill: rgba(0, 0, 0, 0);
+  fill: rgba(var(--fg), 1);
+  stroke: rgba(var(--bg), 1);
   stroke-width: 1px;
 }
 

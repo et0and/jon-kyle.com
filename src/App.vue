@@ -13,7 +13,8 @@ export default {
   components: { GlobalHeader },
   mounted() {
     this.$store.dispatch('fetchOptions')
-    this.$store.dispatch('fetchInstagram')
+    // DISABLE INSTAGRAM BECAUSE THE API BUSTED
+    // this.$store.dispatch('fetchInstagram')
     if (this.$route.path !== '/' && this.$route.path !== '/index') {
       this.$store.dispatch('fetchPage', this.$route.path)
     }
