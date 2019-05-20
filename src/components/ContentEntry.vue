@@ -192,7 +192,7 @@ export default {
       if (!(target instanceof HTMLAnchorElement)) return
       const href = target.getAttribute('href')
       // Get link target, if local link, navigate with router link
-      if (href && href[0] === '/') {
+      if (href && href[0] === '/' && !event.ctrlKey) {
         event.preventDefault()
         this.$router.push(href)
       }
