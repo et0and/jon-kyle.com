@@ -43,7 +43,7 @@ import { mixin } from '../store'
 export default {
   name: 'home',
   mixins: [mixin],
-  components: { WrapperStandard, ContentEntry },
+  components: { LoadingIndicator, WrapperStandard, ContentEntry },
   mounted () {
     const parentUrl = this.$route.path.substring(0, this.$route.path.lastIndexOf('/'))
     this.$store.dispatch('fetchPage', parentUrl)
