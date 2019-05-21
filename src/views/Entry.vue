@@ -1,6 +1,7 @@
 <template>
   <WrapperStandard>
     <ContentEntry :entry="page" v-if="page" :key="page.name" />
+    <LoadingIndicator v-else />
     <div class="footer">
       <div v-if="false">
         <router-link v-if="parent" :to="parent.url">
@@ -33,6 +34,7 @@
 </template>
 
 <script>
+import LoadingIndicator from '@/components/LoadingIndicator'
 import WrapperStandard from '@/components/WrapperStandard'
 import ContentEntry from '@/components/ContentEntry'
 import FeedEntries from '@/components/FeedEntries'
